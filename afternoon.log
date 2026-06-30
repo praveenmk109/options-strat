@@ -1,0 +1,78 @@
+
+--- Running Afternoon Trade Execution (2:00 PM CT) ---
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Execution (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Execution (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 1 potential candidates reporting today AMC or tomorrow BMO.
+
+Processing candidate: ORCL
+Error calculating straddle implied move for ORCL: {"message": "unauthorized."}
+
+Skipping ORCL: Failed to fetch straddle data.
+Logged skipped trade for ORCL on 2026-06-10. Reason: Failed to fetch option straddle quotes
+
+--- Running Afternoon Trade Execution (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Execution (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Execution (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Execution (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Execution (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Execution (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Execution (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Execution (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 1 potential candidates reporting today AMC or tomorrow BMO.
+
+Processing candidate: CCL
+Error calculating straddle implied move for CCL: {"message": "unauthorized."}
+
+Skipping CCL: Failed to fetch straddle data.
+Logged skipped trade for CCL on 2026-06-23. Reason: Failed to fetch option straddle quotes
+
+--- Running Afternoon Trade Execution (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Scan (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 1 potential candidates reporting today AMC or tomorrow BMO.
+
+Processing candidate: MU
+Skipping MU: Stock price $1012.12 exceeds $250 limit.
+
+--- Running Afternoon Trade Scan (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Scan (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Scan (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.

@@ -1,0 +1,101 @@
+Ticker,Earnings Date,Time (ET),Session,Suggested Strategy,Hist. Win Rate (%),Avg Move (%)
+ORCL,2026-06-10,04:00 PM,After-Hours (AMC),No specific pattern,N/A,11.35%
+CCL,2026-06-24,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),91.7%,2.94%
+MU,2026-06-24,04:00 PM,After-Hours (AMC),No specific pattern,N/A,7.94%
+NKE,2026-06-30,04:00 PM,After-Hours (AMC),No specific pattern,N/A,8.73%
+GIS,2026-07-01,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),91.7%,3.19%
+CAG,2026-07-09,08:00 AM,Pre-Market (BMO),Bear Call Spread (+5%),91.7%,2.97%
+JPM,2026-07-14,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,1.34%
+BAC,2026-07-14,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,1.77%
+WFC,2026-07-14,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),91.7%,3.53%
+C,2026-07-14,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,1.72%
+KMI,2026-07-15,04:00 PM,After-Hours (AMC),Iron Condor (±5%),100.0%,1.31%
+SCHW,2026-07-16,08:00 AM,Pre-Market (BMO),No specific pattern,N/A,3.50%
+ABT,2026-07-16,08:00 AM,Pre-Market (BMO),Bear Call Spread (+5%),100.0%,3.42%
+USB,2026-07-16,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),91.7%,1.83%
+NFLX,2026-07-16,04:00 PM,After-Hours (AMC),No specific pattern,N/A,7.67%
+RF,2026-07-17,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),91.7%,2.91%
+VZ,2026-07-21,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),100.0%,3.40%
+HAL,2026-07-21,08:00 AM,Pre-Market (BMO),Bear Call Spread (+5%),91.7%,3.31%
+KO,2026-07-21,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),100.0%,2.09%
+KEY,2026-07-21,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,2.44%
+CSGP,2026-07-21,04:00 PM,After-Hours (AMC),Bear Call Spread (+5%),100.0%,3.72%
+FCX,2026-07-22,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),91.7%,3.21%
+NEE,2026-07-22,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),91.7%,1.69%
+T,2026-07-22,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),100.0%,3.11%
+TXN,2026-07-22,04:00 PM,After-Hours (AMC),No specific pattern,N/A,5.99%
+IBM,2026-07-22,04:00 PM,After-Hours (AMC),No specific pattern,N/A,6.07%
+NOW,2026-07-22,04:00 PM,After-Hours (AMC),No specific pattern,N/A,6.90%
+TSLA,2026-07-22,04:00 PM,After-Hours (AMC),No specific pattern,N/A,6.97%
+DOW,2026-07-23,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),91.7%,3.46%
+KDP,2026-07-23,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),100.0%,3.96%
+TSCO,2026-07-23,08:00 AM,Pre-Market (BMO),Bear Call Spread (+5%),91.7%,3.53%
+HBAN,2026-07-23,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,1.72%
+INTC,2026-07-23,04:00 PM,After-Hours (AMC),No specific pattern,N/A,10.30%
+GOOG,2026-07-23,04:00 PM,After-Hours (AMC),No specific pattern,N/A,6.16%
+GOOGL,2026-07-23,04:00 PM,After-Hours (AMC),No specific pattern,N/A,6.34%
+DOC,2026-07-23,04:00 PM,After-Hours (AMC),Tight Iron Condor (±3%),91.7%,1.96%
+SLB,2026-07-24,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,1.51%
+PYPL,2026-07-28,08:00 AM,Pre-Market (BMO),No specific pattern,N/A,8.04%
+GLW,2026-07-28,08:00 AM,Pre-Market (BMO),No specific pattern,N/A,5.18%
+V,2026-07-28,04:00 PM,After-Hours (AMC),Bull Put Spread (-5%),100.0%,2.41%
+PG,2026-07-29,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),100.0%,2.67%
+PFE,2026-07-29,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,1.55%
+BSX,2026-07-29,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),91.7%,3.99%
+CTSH,2026-07-29,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),100.0%,3.85%
+KHC,2026-07-29,08:00 AM,Pre-Market (BMO),Bear Call Spread (+5%),100.0%,2.47%
+QCOM,2026-07-29,04:00 PM,After-Hours (AMC),No specific pattern,N/A,6.18%
+MSFT,2026-07-29,04:00 PM,After-Hours (AMC),No specific pattern,N/A,4.32%
+META,2026-07-29,04:00 PM,After-Hours (AMC),No specific pattern,N/A,8.61%
+CMG,2026-07-29,04:00 PM,After-Hours (AMC),Bear Call Spread (+5%),91.7%,6.29%
+LRCX,2026-07-29,04:00 PM,After-Hours (AMC),No specific pattern,N/A,4.09%
+HST,2026-07-29,04:00 PM,After-Hours (AMC),Bear Call Spread (+5%),100.0%,2.72%
+F,2026-07-29,04:00 PM,After-Hours (AMC),Bear Call Spread (+5%),91.7%,4.01%
+CVNA,2026-07-29,04:00 PM,After-Hours (AMC),No specific pattern,N/A,15.40%
+CSX,2026-07-29,04:00 PM,After-Hours (AMC),Bull Put Spread (-5%),91.7%,3.06%
+HOOD,2026-07-29,04:00 PM,After-Hours (AMC),No specific pattern,N/A,7.61%
+PCG,2026-07-30,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,0.69%
+EXC,2026-07-30,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,1.55%
+NCLH,2026-07-30,08:00 AM,Pre-Market (BMO),No specific pattern,N/A,7.09%
+BMY,2026-07-30,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),100.0%,2.88%
+CMCSA,2026-07-30,08:00 AM,Pre-Market (BMO),Bear Call Spread (+5%),91.7%,4.69%
+CVS,2026-07-30,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),91.7%,5.91%
+D,2026-07-30,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,1.24%
+PPL,2026-07-30,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,0.87%
+MO,2026-07-30,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),100.0%,2.68%
+AMZN,2026-07-30,04:00 PM,After-Hours (AMC),No specific pattern,N/A,6.39%
+AES,2026-07-30,04:00 PM,After-Hours (AMC),Iron Condor (±5%),91.7%,1.76%
+COIN,2026-07-30,04:00 PM,After-Hours (AMC),Bull Put Spread (-5%),91.7%,4.36%
+AAPL,2026-07-30,04:00 PM,After-Hours (AMC),Bull Put Spread (-5%),100.0%,2.84%
+XOM,2026-07-31,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,1.19%
+CVX,2026-07-31,08:00 AM,Pre-Market (BMO),Iron Condor (±5%),100.0%,1.33%
+ON,2026-08-03,08:00 AM,Pre-Market (BMO),No specific pattern,N/A,4.34%
+PLTR,2026-08-03,04:00 PM,After-Hours (AMC),No specific pattern,N/A,11.96%
+MRK,2026-08-04,08:00 AM,Pre-Market (BMO),Bear Call Spread (+5%),100.0%,3.04%
+ZTS,2026-08-04,08:00 AM,Pre-Market (BMO),No specific pattern,N/A,5.70%
+MOS,2026-08-04,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),91.7%,2.89%
+DVN,2026-08-04,04:00 PM,After-Hours (AMC),Bear Call Spread (+5%),100.0%,2.36%
+ANET,2026-08-04,04:00 PM,After-Hours (AMC),No specific pattern,N/A,8.37%
+AMD,2026-08-04,04:00 PM,After-Hours (AMC),No specific pattern,N/A,6.27%
+SMCI,2026-08-04,04:00 PM,After-Hours (AMC),No specific pattern,N/A,12.09%
+DIS,2026-08-05,08:00 AM,Pre-Market (BMO),No specific pattern,N/A,5.68%
+UBER,2026-08-05,08:00 AM,Pre-Market (BMO),No specific pattern,N/A,3.82%
+OXY,2026-08-05,04:00 PM,After-Hours (AMC),Bull Put Spread (-5%),91.7%,2.49%
+VTRS,2026-08-06,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),91.7%,4.01%
+KVUE,2026-08-06,08:00 AM,Pre-Market (BMO),Bull Put Spread (-5%),100.0%,4.58%
+MCHP,2026-08-06,04:00 PM,After-Hours (AMC),Bear Call Spread (+5%),91.7%,4.37%
+TTD,2026-08-06,04:00 PM,After-Hours (AMC),No specific pattern,N/A,13.89%
+WBD,2026-08-06,04:00 PM,After-Hours (AMC),No specific pattern,N/A,5.13%
+GEN,2026-08-06,04:00 PM,After-Hours (AMC),Bull Put Spread (-5%),91.7%,4.61%
+CSCO,2026-08-12,04:00 PM,After-Hours (AMC),No specific pattern,N/A,5.50%
+AMAT,2026-08-13,04:00 PM,After-Hours (AMC),No specific pattern,N/A,6.24%
+MDT,2026-08-18,08:00 AM,Pre-Market (BMO),Bear Call Spread (+5%),100.0%,2.97%
+PANW,2026-08-18,04:00 PM,After-Hours (AMC),No specific pattern,N/A,7.02%
+WMT,2026-08-20,08:00 AM,Pre-Market (BMO),No specific pattern,N/A,4.21%
+NVDA,2026-08-26,04:00 PM,After-Hours (AMC),Bull Put Spread (-5%),100.0%,3.85%
+HPQ,2026-08-26,04:00 PM,After-Hours (AMC),Bear Call Spread (+5%),100.0%,4.57%
+CRM,2026-09-02,04:00 PM,After-Hours (AMC),No specific pattern,N/A,5.58%
+CPRT,2026-09-03,04:00 PM,After-Hours (AMC),Bear Call Spread (+5%),91.7%,3.17%
+HPE,2026-09-03,04:00 PM,After-Hours (AMC),No specific pattern,N/A,9.41%
+DELL,2026-09-03,04:00 PM,After-Hours (AMC),No specific pattern,N/A,12.35%
+AVGO,2026-09-03,04:00 PM,After-Hours (AMC),No specific pattern,N/A,7.68%

@@ -76,3 +76,37 @@ Found 0 potential candidates reporting today AMC or tomorrow BMO.
 --- Running Afternoon Trade Scan (2:00 PM CT) ---
 Fetching earnings dates for 100 tickers (parallel)...
 Found 0 potential candidates reporting today AMC or tomorrow BMO.
+
+--- Running Afternoon Trade Scan (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (parallel)...
+Found 2 potential candidates reporting today AMC or tomorrow BMO.
+
+Processing candidate: GIS
+Error calculating straddle implied move for GIS: {"message": "unauthorized."}
+
+Skipping GIS: Failed to fetch option straddle quotes.
+
+Processing candidate: NKE
+Error calculating straddle implied move for NKE: {"message": "unauthorized."}
+
+Skipping NKE: Failed to fetch option straddle quotes.
+
+--- Running Afternoon Trade Scan (2:00 PM CT) ---
+Fetching earnings dates for 100 tickers (fast calendar pass)...
+Found 2 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 2 matching tickers...
+Found 2 potential candidates reporting today AMC or tomorrow BMO.
+
+Processing candidate: NKE
+  Live Implied Move: 24.29%
+  Required Move (Historical 8.73% * Multiplier 1.5): 13.10%
+  Consensus Alignment: -0.26 | Adj Multiplier: 1.58
+  Adjusted Required Move: 13.78%
+
+Processing candidate: GIS
+  Live Implied Move: 31.91%
+  Required Move (Historical 3.19% * Multiplier 1.5): 4.79%
+  Consensus Alignment: -0.05 | Adj Multiplier: 1.52
+  Adjusted Required Move: 4.83%
+Advisory sent: 2 viable, 0 skipped of 2 candidates.
+python3: can't open file '/home/ubuntu/options-strat/automated_system.py': [Errno 2] No such file or directory

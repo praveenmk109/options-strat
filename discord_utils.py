@@ -125,79 +125,81 @@ def send_error_alert(error_message):
     }
     return send_discord_payload(payload)
 
-def send_afternoon_advisory(date_str, candidates, viable, skipped):
-    if viable:
-        description = f"Found {len(viable)} actionable trade(s) for today AMC / tomorrow BMO:"
-        color = 3066993
-    elif candidates:
-        description = f"Evaluated {len(candidates)} candidate(s), but none passed filters. See skipped details below."
-        color = 15158332
-    else:
-        description = "No upcoming earnings candidates found for today AMC or tomorrow BMO."
-        color = 3447003
+def build_candidate_block(v):
+    put_str = f"${v['short_put']}/{v['long_put']}" if v['short_put'] else "None"
+    call_str = f"${v['short_call']}/{v['long_call']}" if v['short_call'] else "None"
+    wr = f"{v.get('strategy_win_rate', 0):.1f}%" if v.get('strategy_win_rate') else "N/A"
 
-    fields = []
-    for v in viable:
-        put_str = f"${v['short_put']}/{v['long_put']}" if v['short_put'] else "None"
-        call_str = f"${v['short_call']}/{v['long_call']}" if v['short_call'] else "None"
-        eps_line = ""
-        if v['eps_estimate'] is not None and v['eps_reported'] is not None:
-            s = v['eps_surprise']
-            surprise_str = f"({s:+.1f}%)" if s is not None else ""
-            eps_line = f"\n**Last EPS**: Est ${v['eps_estimate']:.2f} vs ${v['eps_reported']:.2f} {surprise_str}"
-        vol_line = ""
-        cv, coi, pv, poi = v['call_volume'], v['call_open_interest'], v['put_volume'], v['put_open_interest']
-        if any(x is not None for x in [cv, coi, pv, poi]):
-            cv_s = f"{cv:,}" if cv is not None else "?"
-            coi_s = f"{coi:,}" if coi is not None else "?"
-            pv_s = f"{pv:,}" if pv is not None else "?"
-            poi_s = f"{poi:,}" if poi is not None else "?"
-            vol_line = f"\n**Call Vol/OI**: {cv_s}/{coi_s}  **Put Vol/OI**: {pv_s}/{poi_s}"
-        val = (
-            f"**Price**: ${v['price']:.2f} | **Straddle**: ${v['straddle_price']:.2f} (±{v['implied_move']:.2f}%) | **Hist**: {v['hist_move']:.2f}%\n"
-            f"**Go/No-Go**: ✅ {v['strategy']} | **Expiry**: {v['expiration_yymmdd']}\n"
-            f"**Credit**: ${v['est_credit']:.2f} | **Risk**: ${v['margin']:.2f}\n"
-            f"**Strikes**: Put {put_str}  Call {call_str}{vol_line}{eps_line}"
+    eps_line = ""
+    ee, er = v.get('eps_estimate'), v.get('eps_reported')
+    if ee is not None and er is not None:
+        s = v.get('eps_surprise')
+        ss = f" ({s:+.1f}% surprise)" if s is not None else ""
+        eps_line = f"\n**Last EPS**: Est ${ee:.2f} vs ${er:.2f}{ss}"
+
+    vol_line = ""
+    cv, coi, pv, poi = v.get('call_volume'), v.get('call_open_interest'), v.get('put_volume'), v.get('put_open_interest')
+    if any(x is not None for x in [cv, coi, pv, poi]):
+        fmt = lambda x: f"{x:,}" if x is not None else "?"
+        vol_line = f"\n**Call Vol/OI**: {fmt(cv)}/{fmt(coi)}  **Put Vol/OI**: {fmt(pv)}/{fmt(poi)}"
+
+    align = v.get('alignment', 0)
+    badge = "✅ Go" if align >= -0.1 else "⚠️ Go (Contrarian)"
+
+    block = (
+        f"**✅ {v['ticker']} ({v['strategy']})**\n"
+        f"**Price**: ${v['price']:.2f} | **Session**: {v['session']}\n"
+        f"**Straddle**: ${v['straddle_price']:.2f} (±{v['implied_move']:.2f}%) | **Hist**: {v['hist_move']:.2f}%\n"
+        f"**{badge}** | **Win Rate**: {wr} | **Expiry**: {v['expiration_yymmdd']}"
+    )
+
+    c = v.get('consensus', {})
+    upside = v.get('target_upside')
+    if c.get('recommendation'):
+        rec = c['recommendation'].title()
+        rm = f" ({c['recommendation_mean']:.2f})" if c.get('recommendation_mean') else ""
+        pt = f"${c['target_mean']:.2f}" if c.get('target_mean') else "N/A"
+        us = f" ({upside:+.1f}%)" if upside is not None else ""
+        ac = f" | {int(c['analyst_count'])} analysts" if c.get('analyst_count') else ""
+        block += f"\n**Analyst Consensus**: {rec}{rm} | Target {pt}{us}{ac}"
+
+    block += (
+        f"\n**Est. Credit**: ${v['est_credit']:.2f} | **Max Risk**: ${v['margin']:.2f}\n"
+        f"**Put Strikes**: {put_str}  **Call Strikes**: {call_str}{vol_line}{eps_line}"
+    )
+
+    analyst_calls = v.get('analyst_calls', [])
+    if analyst_calls:
+        block += "\n" + "\n".join(
+            f"🔬 {c['date']}: {c['summary']}"
+            for c in analyst_calls
         )
-        news_items = v.get('news', [])
-        if news_items:
-            news_lines = "\n".join(
-                f"📰 {n['title']}" + (f" — {n['publisher']}" if n.get('publisher') else "")
-                for n in news_items
-            )
-            val += f"\n{news_lines}"
-        fields.append({
-            "name": f"✅ {v['ticker']} - {v['strategy']}",
-            "value": val,
-            "inline": False
-        })
+    return block
 
-    if skipped and viable:
+
+def send_afternoon_advisory(date_str, candidates, viable, skipped):
+    parts = []
+    if viable:
+        parts.append(f"Found {len(viable)} actionable trade(s) for today AMC / tomorrow BMO:\n")
+        for v in viable:
+            parts.append(build_candidate_block(v))
+    elif candidates:
+        parts.append(f"Evaluated {len(candidates)} candidate(s), but none passed filters.\n")
+    else:
+        parts.append("No upcoming earnings candidates found for today AMC or tomorrow BMO.\n")
+
+    if skipped:
         skip_summary = "\n".join(f"• {t}: {r}" for t, r in skipped[:5])
         if len(skipped) > 5:
             skip_summary += f"\n...and {len(skipped)-5} more"
-        fields.append({
-            "name": "Skipped",
-            "value": skip_summary,
-            "inline": False
-        })
-    elif skipped:
-        skip_summary = "\n".join(f"• {t}: {r}" for t, r in skipped[:5])
-        if len(skipped) > 5:
-            skip_summary += f"\n...and {len(skipped)-5} more"
-        fields.append({
-            "name": "Evaluated (all skipped)",
-            "value": skip_summary,
-            "inline": False
-        })
+        parts.append(f"**Skipped:**\n{skip_summary}")
 
     payload = {
         "username": "Earnings Trading Bot",
         "embeds": [{
             "title": "📋 Afternoon Trade Advisory",
-            "description": description,
-            "color": color,
-            "fields": fields,
+            "description": "\n---\n".join(parts),
+            "color": 3066993 if viable else (15158332 if candidates else 3447003),
             "footer": {
                 "text": "Advisory runs daily at 2:00 PM CT"
             },

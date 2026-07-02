@@ -1,102 +1,60 @@
-# Session Handoff: Automated Self-Improving Options Earnings Trading Bot
+# Session Handoff: Automated Earnings Options Advisory Bot
 
-This document outlines the architecture, mathematical model, codebase layout, and execution instructions for the automated options paper-trading system. The target system is designed to run on an Ubuntu VM (Oracle Cloud) and trade the options credit spreads of highly liquid S&P 500 stocks.
+Single-mode advisory-only system. No order execution. Runs at 2:00 PM CT daily.
 
----
+## Architecture
 
-## 1. System Vision & Strategy Mechanics
+- **`automated_system.py`**: `run_afternoon_execution()` — finds AMC/BMO candidates, fetches straddle data, analyst consensus, upgrades, volume/OI, EPS, sends Discord advisory
+- **`alpaca_utils.py`**: Alpaca price/straddle quotes + yfinance for upgrades/downgrades, analyst consensus, options volume/OI
+- **`discord_utils.py`**: Single-embed advisory message (no embed fields — select-all copyable)
+- **`database_manager.py`**: SQLite CRUD (advisory-only, no trades logged)
+- **`db_init.py`**: Schema + seed 100 S&P 500 stocks
+- **`config.py`**: .env loader
+- **`.env`**: Alpaca keys ($53K paper, from option-wheel) + Discord webhook
 
-The system exploits the **Implied Volatility (IV) Crush** that occurs immediately following a stock's earnings announcement. Option prices swell prior to the event (uncertainty) and collapse directly after open (certainty). 
+## Go/No-Go Decision
 
-### Go/No-Go Decision Edge
-The bot queries the closest weekly At-The-Money (ATM) Straddle on Alpaca right before market close and calculates the market's expected move:
-$$\text{Implied Move (\%)} \approx 0.85 \times \frac{\text{ATM Straddle Price}}{\text{Stock Price}} \times 100$$
-* **Edge Requirement**: A trade is executed **only** if the current Implied Move is greater than or equal to the stock's historical average earnings move multiplied by a dynamic threshold:
-$$\text{Implied Move (\%)} \ge \text{avg\_abs\_move (\%)} \times \text{dynamic\_multiplier}$$
+1. **Base edge**: `implied_move >= avg_hist_move * multiplier` (multiplier defaults to 1.5)
+2. **Consensus alignment**: recommendation_mean (1=strong buy, 5=strong sell) vs strategy direction
+   - Bull Put + Buy → positive alignment (easier to pass)
+   - Bear Call + Buy → negative alignment/harder to pass (contrarian)
+3. **Adjusted multiplier**: `multiplier * (1 - alignment * 0.2)` — ±20% adjustment
+4. **Badge**: "✅ Go" (aligned/neutral) or "⚠️ Go (Contrarian)"
 
-### Self-Improving Adaptive Thresholds
-The SQLite database stores a `dynamic_multiplier` for each stock (defaults to `1.5x`).
-* **On Breach (Loss)**: If the post-earnings opening price gaps past the sold short strike, the stock's dynamic multiplier is increased by **+0.2** (requiring a wider safety edge for the next cycle).
-* **On Success (Win)**: The multiplier decreases by **-0.05** per consecutive win (floor at 1.1x) to capture premium more aggressively during stable cycles.
+## Data Sources
 
-### Capital Allocation & Risk Controls ($5,000 Account)
-* **Maximum Risk**: Capped at 3% ($150) max loss per trade.
-* **Strike Selection (5% OOTM spreads)**:
-  * **Short Strike**: Set at 5% Out-Of-The-Money relative to the pre-earnings price.
-  * **Spread Widths**: 
-    * Stocks under $100 price: Sell **$1.00 wide** spreads (1 contract, ~$70 net risk).
-    * Stocks between $100 and $250 price: Sell **$2.00 wide** spreads (1 contract, ~$130 net risk).
-    * Stocks over $250 price: **Skip the trade** to prevent over-allocation.
+- **Earnings calendar**: yfinance `t.calendar` (fast, no rate limit) + `t.earnings_dates` (scrape) for subset
+- **Straddle**: Alpaca option quotes
+- **Analyst consensus (free)**: yfinance `t.info` (target price, recommendation) + `t.recommendations_summary` (rating trend)
+- **Upgrades/downgrades**: yfinance `t.upgrades_downgrades`
+- **Options chain**: yfinance for volume/OI
+- **EPS data**: yfinance `earnings_dates` DataFrame
 
----
-
-## 2. File & Folder Structure
-
-All core scripts and configs reside in the project root (`/home/ubuntu/options-strat/`):
-
-* **`.env`**: Stores API credentials and Discord webhook URL.
-* **`config.py`**: A zero-dependency script loader that parses `.env` parameters into `os.environ`.
-* **`db_init.py`**: Creates the SQLite schema and seeds stock metadata with average historical moves.
-* **`database_manager.py`**: Interacts with the local SQLite database (`earnings_trading.db`). Tracks skipped, open, and closed trades and updates multipliers.
-* **`alpaca_utils.py`**: Wrapper for `alpaca-py`. Handles ATM Straddle price lookups, OCC symbol generation, and multi-leg order execution/liquidation.
-* **`discord_utils.py`**: Formats and sends color-coded rich embeds (watchlists, fills, reviews) via Discord webhooks.
-* **`automated_system.py`**: The primary daily orchestrator. Accepts `--mode morning`, `--mode afternoon`, and `--mode review` parameters.
-* **`setup_scheduler.bat`**: Windows Task Scheduler helper (useful for local Windows testing).
-* **`sp500_strategy_simulations.csv`**: Backtest results for the 102 highly liquid S&P 500 stocks.
-* **`sp500_upcoming_earnings_calendar.csv`**: Compiled calendar of upcoming earnings matches.
-
----
-
-## 3. SQLite Database Schema (`earnings_trading.db`)
-
-* **`stocks_metadata`**:
-  * `ticker` (TEXT, Primary Key)
-  * `avg_abs_move` (REAL) - Historical average earnings move.
-  * `dynamic_multiplier` (REAL) - Current multiplier threshold (starts at 1.5).
-  * `consecutive_wins` (INTEGER) - Tracking consecutive wins for decaying.
-* **`trade_log`**:
-  * `id` (INTEGER, Primary Key)
-  * `ticker` (TEXT), `earnings_date` (TEXT), `session` (TEXT), `strategy_type` (TEXT)
-  * `short_strike_put` (REAL), `long_strike_put` (REAL), `short_strike_call` (REAL), `long_strike_call` (REAL)
-  * `entry_price` (REAL), `exit_price` (REAL), `realized_open_price` (REAL), `pnl` (REAL)
-  * `status` (TEXT: 'OPEN', 'CLOSED', 'SKIPPED')
-  * `is_breached` (INTEGER: 0 or 1)
-  * `alpaca_order_id` (TEXT), `entry_timestamp` (TEXT), `exit_timestamp` (TEXT)
-
----
-
-## 4. Ubuntu VM Setup & Scheduling Instructions
-
-### 1. Python Prerequisites
-Install dependencies on the cloud VM:
-```bash
-pip install yfinance pandas numpy alpaca-py tabulate lxml bs4
-```
-### 2. Timezone Sync
-
-The VM is set to America/Chicago (CT). If you prefer ET instead:
-```bash
-sudo timedatectl set-timezone America/New_York
-```
-Note: All crontab schedules below are in **CT** to match the current VM timezone.
-
-### 3. Crontab Scheduling
-Add the automated jobs by running `crontab -e` and appending these scheduled runs (adjust the directory path to match your VM path):
+## Crontab
 
 ```text
-# 1. Afternoon Trade Advisory (Runs 2:00 PM CT, Monday-Friday)
+# Afternoon Advisory (2:00 PM CT, Mon-Fri)
 00 14 * * 1-5 cd /home/ubuntu/options-strat && python3 automated_system.py --mode afternoon >> afternoon.log 2>&1
 
-# 2. Monthly Strategy Retraining (1st of month at 6:30 AM CT)
+# Monthly Retrain (1st at 6:30 AM CT)
 30 06 1 * * cd /home/ubuntu/options-strat && python3 get_sp500_earnings_prices.py && python3 simulate_sp500_strategies.py && python3 db_init.py >> retrain.log 2>&1
 ```
 
----
+## Verification
 
-## 5. Verification Commands for the Next Session
-To verify that everything is running correctly, ask the assistant to run:
+```bash
+python3 automated_system.py --mode afternoon
+```
 
-1. **Test DB connection & Seeding**:
-   `python db_init.py` (Reseeds/Verify DB connection).
-2. **Dry-Run Watchlist Scan**:
-   `python automated_system.py --mode morning` (Should scrape and check dates, sending a Discord embed watchlist).
+## Key Files
+
+| File | Purpose |
+|---|---|
+| `automated_system.py` | Main orchestrator (287 lines) |
+| `alpaca_utils.py` | Alpaca + yfinance wrappers (256 lines) |
+| `discord_utils.py` | Discord embed builder (193 lines) |
+| `database_manager.py` | SQLite CRUD |
+| `db_init.py` | Schema + seed |
+| `earnings_trading.db` | SQLite DB, 100 stocks |
+| `sp500_strategy_simulations.csv` | Win rates from last retrain |
+| `.env` | API keys |

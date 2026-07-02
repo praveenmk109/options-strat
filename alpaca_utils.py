@@ -130,9 +130,16 @@ def get_atm_straddle_implied_move(ticker, current_price):
 
 def get_option_volume_and_oi(ticker, expiration_yymmdd, call_strike, put_strike):
     try:
-        exp_date = datetime.strptime(expiration_yymmdd, "%y%m%d").strftime("%Y-%m-%d")
+        exp_date_str = datetime.strptime(expiration_yymmdd, "%y%m%d").strftime("%Y-%m-%d")
         t = yf.Ticker(ticker)
-        chain = t.option_chain(exp_date)
+        available = t.options
+        if exp_date_str not in available:
+            target = datetime.strptime(expiration_yymmdd, "%y%m%d").date()
+            future = [d for d in available if datetime.strptime(d, '%Y-%m-%d').date() >= target]
+            if not future:
+                return None, None, None, None
+            exp_date_str = future[0]
+        chain = t.option_chain(exp_date_str)
         calls = chain.calls
         puts = chain.puts
 
@@ -150,23 +157,72 @@ def get_option_volume_and_oi(ticker, expiration_yymmdd, call_strike, put_strike)
         print(f"Error fetching option volume for {ticker}: {e}")
         return None, None, None, None
 
-def get_recent_news(ticker, max_count=3):
+def get_analyst_calls(ticker, max_count=3):
+    """Get most recent analyst upgrades/downgrades/price target changes."""
     try:
         t = yf.Ticker(ticker)
-        news = t.news
-        if not news:
+        ud = t.upgrades_downgrades
+        if ud is None or ud.empty:
             return []
-        headlines = []
-        for item in news[:max_count]:
-            title = item.get('title', '').strip()
-            publisher = item.get('publisher', '')
-            link = item.get('link', '')
-            if title:
-                headlines.append({'title': title, 'publisher': publisher, 'link': link})
-        return headlines
+        recent = ud.head(max_count)
+        calls = []
+        for idx, row in recent.iterrows():
+            firm = row.get('Firm', '')
+            action = row.get('Action', '')
+            to_grade = row.get('ToGrade', '')
+            curr_pt = row.get('currentPriceTarget', None)
+            prior_pt = row.get('priorPriceTarget', None)
+            date_str = idx.strftime('%b %d') if hasattr(idx, 'strftime') else str(idx)
+            parts = [f"**{firm}**"]
+            if action and action.lower() in ('up', 'down'):
+                parts.append(action.title())
+            if to_grade:
+                parts.append(f"→ {to_grade}")
+            if curr_pt and curr_pt > 0:
+                pt_str = f"PT ${curr_pt:.0f}"
+                if prior_pt and prior_pt > 0:
+                    pt_str += f" (from ${prior_pt:.0f})"
+                parts.append(pt_str)
+            calls.append({"summary": " | ".join(parts), "date": date_str})
+        return calls
     except Exception as e:
-        print(f"Error fetching news for {ticker}: {e}")
+        print(f"Error fetching analyst calls for {ticker}: {e}")
         return []
+
+def get_analyst_consensus(ticker):
+    """Fetch consensus price target, recommendation, and rating trend via yfinance (free, no rate limit)."""
+    try:
+        t = yf.Ticker(ticker)
+        info = t.info
+        consensus = {
+            "target_mean": info.get('targetMeanPrice'),
+            "target_high": info.get('targetHighPrice'),
+            "target_low": info.get('targetLowPrice'),
+            "recommendation": info.get('recommendationKey'),
+            "recommendation_mean": info.get('recommendationMean'),
+            "analyst_count": info.get('numberOfAnalystOpinions'),
+        }
+        # Rating trend from recommendations_summary (0m, -1m, -2m, -3m)
+        trend = []
+        try:
+            rs = t.recommendations_summary
+            if rs is not None and not rs.empty:
+                for idx, row in rs.iterrows():
+                    trend.append({
+                        "period": idx,
+                        "strong_buy": int(row.get('strongBuy', 0)),
+                        "buy": int(row.get('buy', 0)),
+                        "hold": int(row.get('hold', 0)),
+                        "sell": int(row.get('sell', 0)),
+                        "strong_sell": int(row.get('strongSell', 0)),
+                    })
+        except Exception:
+            pass
+        return consensus, trend
+    except Exception as e:
+        print(f"Error fetching analyst consensus for {ticker}: {e}")
+        return {"target_mean": None, "target_high": None, "target_low": None,
+                "recommendation": None, "recommendation_mean": None, "analyst_count": None}, []
 
 def find_option_contract(ticker, expiration_yymmdd, option_type, strike):
     """

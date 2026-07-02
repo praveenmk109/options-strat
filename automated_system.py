@@ -4,9 +4,8 @@ import pandas as pd
 from datetime import datetime, timedelta
 import yfinance as yf
 import os
-import concurrent.futures
+import numpy as np
 
-# Import our modular utilities
 import database_manager as db
 import alpaca_utils as alpaca
 import discord_utils as discord
@@ -14,7 +13,6 @@ import discord_utils as discord
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SIMS_CSV = os.path.join(SCRIPT_DIR, "sp500_strategy_simulations.csv")
 
-# Define the list of liquid S&P 500 stocks (we have 100 seeded in SQLite)
 def get_monitored_tickers():
     conn = db.get_db_connection()
     cursor = conn.cursor()
@@ -23,56 +21,73 @@ def get_monitored_tickers():
     conn.close()
     return [r[0] for r in rows]
 
-def fetch_earnings_dates_batch(tickers):
-    """Fetch earnings dates for multiple tickers in parallel."""
-    results = {}
-    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        future_to_ticker = {executor.submit(_fetch_single_earnings, t): t for t in tickers}
-        for future in concurrent.futures.as_completed(future_to_ticker):
-            t, df = future.result()
-            if df is not None:
-                results[t] = df
-    return results
+def safe_val(v, fmt=None, default="N/A"):
+    if v is None or (isinstance(v, float) and np.isnan(v)):
+        return default
+    if fmt:
+        return fmt % v
+    return v
 
-def _fetch_single_earnings(ticker):
+def _get_calendar_date(ticker_symbol):
     try:
-        ticker_obj = yf.Ticker(ticker)
-        df = ticker_obj.earnings_dates
+        t = yf.Ticker(ticker_symbol)
+        cal = t.calendar
+        if cal is None or cal.empty:
+            return None
+        ed = cal.get('Earnings Date')
+        if ed is not None and hasattr(ed, 'iloc'):
+            ed = ed.iloc[0]
+        if not hasattr(ed, 'hour'):
+            return None
+        return ed
+    except Exception:
+        return None
+
+def _fetch_earnings_with_session(ticker_symbol):
+    try:
+        t = yf.Ticker(ticker_symbol)
+        df = t.earnings_dates
         if df is not None and not df.empty:
-            return ticker, df
+            return df
     except Exception:
         pass
-    return ticker, None
+    return None
 
 def run_afternoon_execution():
     print("\n--- Running Afternoon Trade Scan (2:00 PM CT) ---")
     today = datetime.now()
     today_str = today.strftime('%Y-%m-%d')
     tomorrow_str = (today + timedelta(days=1)).strftime('%Y-%m-%d')
-    
+
     tickers = get_monitored_tickers()
-    candidates = []
-    
-    # At 2:00 PM CT, we target:
-    # 1. Stocks reporting TODAY After-Hours (AMC)
-    # 2. Stocks reporting TOMORROW Pre-Market (BMO)
-    print(f"Fetching earnings dates for {len(tickers)} tickers (parallel)...")
-    earnings_data = fetch_earnings_dates_batch(tickers)
-    
-    for t, df_earnings in earnings_data.items():
-        for idx in df_earnings.index:
-            earnings_date_str = idx.strftime('%Y-%m-%d')
-            hour = idx.hour
-            is_pre_market = hour < 12
-            
-            if earnings_date_str == today_str and not is_pre_market:
-                candidates.append((t, earnings_date_str, "After-Hours (AMC)"))
-            elif earnings_date_str == tomorrow_str and is_pre_market:
-                candidates.append((t, earnings_date_str, "Pre-Market (BMO)"))
-            
+
+    print(f"Fetching earnings dates for {len(tickers)} tickers (fast calendar pass)...")
+    matching = []
+    for t in tickers:
+        ed = _get_calendar_date(t)
+        if ed is None:
+            continue
+        ed_date = ed.strftime('%Y-%m-%d') if hasattr(ed, 'strftime') else str(ed)[:10]
+        hour = ed.hour if hasattr(ed, 'hour') else 0
+        is_bmo = hour < 12
+
+        if ed_date == today_str and not is_bmo:
+            matching.append((t, ed_date, "After-Hours (AMC)"))
+        elif ed_date == tomorrow_str and is_bmo:
+            matching.append((t, ed_date, "Pre-Market (BMO)"))
+
+    print(f"Found {len(matching)} tickers with calendar dates matching today/tomorrow.")
+
+    print(f"Fetching session details for {len(matching)} matching tickers...")
+    earnings_data = {}
+    for t, _, _ in matching:
+        df_ed = _fetch_earnings_with_session(t)
+        if df_ed is not None:
+            earnings_data[t] = df_ed
+
+    candidates = matching
     print(f"Found {len(candidates)} potential candidates reporting today AMC or tomorrow BMO.")
-    
-    # Load simulation data once
+
     try:
         df_sims = pd.read_csv(SIMS_CSV)
     except Exception:
@@ -83,93 +98,110 @@ def run_afternoon_execution():
 
     for t, earnings_date, session in candidates:
         print(f"\nProcessing candidate: {t}")
-        
+
         price = alpaca.get_current_stock_price(t)
         if not price:
             msg = "Could not retrieve stock price"
             print(f"Skipping {t}: {msg}.")
             skipped.append((t, msg))
             continue
-            
-            
+
         meta = db.get_stock_metadata(t)
         if not meta:
             msg = "No database metadata found"
             print(f"Skipping {t}: {msg}.")
             skipped.append((t, msg))
             continue
-            
+
         avg_move = meta['avg_abs_move']
         multiplier = meta['dynamic_multiplier']
         required_move = avg_move * multiplier
-        
+
         res_straddle = alpaca.get_atm_straddle_implied_move(t, price)
         if not res_straddle:
             msg = "Failed to fetch option straddle quotes"
             print(f"Skipping {t}: {msg}.")
             skipped.append((t, msg))
             continue
-            
-        implied_move, straddle_price, expiration_yymmdd, call_strike, put_strike = res_straddle
-        
-        # Fetch option volume / OI for the ATM strikes
-        call_vol, call_oi, put_vol, put_oi = alpaca.get_option_volume_and_oi(
-            t, expiration_yymmdd, call_strike, put_strike
-        )
-        news = alpaca.get_recent_news(t, max_count=3)
 
-        print(f"  Live Implied Move: {implied_move:.2f}%")
-        print(f"  Required Move (Historical {avg_move:.2f}% * Multiplier {multiplier}): {required_move:.2f}%")
-        
-        if implied_move < required_move:
-            msg = f"Implied move {implied_move:.2f}% < Required move {required_move:.2f}%"
-            print(f"Skipping {t}: {msg} (No Edge).")
-            skipped.append((t, msg))
-            continue
-            
-        # Fetch last EPS data from yfinance earnings dates
-        eps_est = eps_reported = eps_surprise = None
-        try:
-            df_earn = earnings_data[t]
-            if df_earn is not None and not df_earn.empty:
-                latest = df_earn.iloc[0]
-                eps_est = latest.get('EPS Estimate')
-                eps_reported = latest.get('Reported EPS')
-                eps_surprise = latest.get('Surprise(%)')
-        except Exception:
-            pass
-            
-        # Edge confirmed! Determine strategy
+        implied_move, straddle_price, expiration_yymmdd, call_strike, put_strike = res_straddle
+
+        consensus, trend = alpaca.get_analyst_consensus(t)
+        target_upside = None
+        if consensus.get('target_mean') and price > 0:
+            target_upside = (consensus['target_mean'] / price - 1) * 100
+
         suggested_strat = "Iron Condor"
+        strategy_win_rate = 0
         if df_sims is not None:
             try:
                 row_sim = df_sims[df_sims['Ticker'] == t].iloc[0]
                 bps = row_sim.get('bps_win_rate_5', 0)
                 bcs = row_sim.get('bcs_win_rate_5', 0)
-                
+
                 if bps >= bcs:
                     suggested_strat = "Bull Put"
+                    strategy_win_rate = bps
                 else:
                     suggested_strat = "Bear Call"
+                    strategy_win_rate = bcs
             except Exception:
                 pass
-            
+
+        alignment = 0
+        if consensus.get('recommendation_mean') is not None:
+            rec_mean = consensus['recommendation_mean']
+            alignment = 3.0 - rec_mean  # positive = bullish, negative = bearish
+            if suggested_strat == "Bear Call":
+                alignment = -alignment
+
+        adj_multiplier = multiplier * (1.0 + 0.2 * max(-1.0, min(1.0, -alignment)))
+        adj_required_move = avg_move * adj_multiplier
+
+        print(f"  Live Implied Move: {implied_move:.2f}%")
+        print(f"  Required Move (Historical {avg_move:.2f}% * Multiplier {multiplier}): {required_move:.2f}%")
+        print(f"  Consensus Alignment: {alignment:.2f} | Adj Multiplier: {adj_multiplier:.2f}")
+        print(f"  Adjusted Required Move: {adj_required_move:.2f}%")
+
+        if implied_move < adj_required_move:
+            msg = f"Implied move {implied_move:.2f}% < Required move {adj_required_move:.2f}%"
+            print(f"Skipping {t}: {msg} (No Edge).")
+            skipped.append((t, msg))
+            continue
+
+        eps_est = eps_reported = eps_surprise = None
+        try:
+            df_earn = earnings_data.get(t)
+            if df_earn is not None and not df_earn.empty:
+                latest = df_earn.iloc[0]
+                eps_est = safe_val(latest.get('EPS Estimate'), None)
+                eps_reported = safe_val(latest.get('Reported EPS'), None)
+                eps_surprise = safe_val(latest.get('Surprise(%)'), None)
+        except Exception:
+            pass
+
+        call_vol, call_oi, put_vol, put_oi = alpaca.get_option_volume_and_oi(
+            t, expiration_yymmdd, call_strike, put_strike
+        )
+
+        analyst_calls = alpaca.get_analyst_calls(t, max_count=3)
+
         wing_width = 1.0 if price < 100.0 else 2.0
-        
+
         short_put, long_put = None, None
         short_call, long_call = None, None
-        
+
         if suggested_strat in ["Iron Condor", "Bull Put"]:
             short_put = round(price * 0.95)
             long_put = short_put - wing_width
-                
+
         if suggested_strat in ["Iron Condor", "Bear Call"]:
             short_call = round(price * 1.05)
             long_call = short_call + wing_width
-            
+
         est_credit = 0.35 * wing_width if suggested_strat == "Iron Condor" else 0.20 * wing_width
         margin = wing_width * 100.0
-        
+
         viable.append({
             "ticker": t,
             "session": session,
@@ -186,8 +218,8 @@ def run_afternoon_execution():
             "implied_move": implied_move,
             "straddle_price": straddle_price,
             "hist_move": avg_move,
-            "required_move": required_move,
-            "multiplier": multiplier,
+            "required_move": adj_required_move,
+            "multiplier": adj_multiplier,
             "expiration_yymmdd": expiration_yymmdd,
             "eps_estimate": eps_est,
             "eps_reported": eps_reported,
@@ -196,34 +228,41 @@ def run_afternoon_execution():
             "call_open_interest": call_oi,
             "put_volume": put_vol,
             "put_open_interest": put_oi,
-            "news": news,
+            "analyst_calls": analyst_calls,
+            "consensus": consensus,
+            "alignment": alignment,
+            "target_upside": target_upside,
+            "strategy_win_rate": strategy_win_rate,
         })
-    
-    discord.send_afternoon_advisory(today_str, candidates, viable, skipped)
+
+    result = discord.send_afternoon_advisory(today_str, candidates, viable, skipped)
+    if result:
+        print(f"Advisory sent: {len(viable)} viable, {len(skipped)} skipped of {len(candidates)} candidates.")
+    else:
+        print(f"Advisory skipped: no candidates ({len(candidates)}) or empty.")
+
+    return bool(result)
 
 def main():
     parser = argparse.ArgumentParser(description="Automated Earnings Option Trading System")
     parser.add_argument(
-        "--mode", 
-        required=True, 
+        "--mode",
+        required=True,
         choices=["afternoon"],
         help="afternoon (2:00 PM CT advisory)"
     )
     args = parser.parse_args()
-    
-    # Check credentials
+
     if alpaca.API_KEY == "YOUR_API_KEY":
         print("[WARNING] Running in DRY-RUN mode. Alpaca credentials are not set.")
-        
+
     try:
         if args.mode == "afternoon":
             run_afternoon_execution()
     except Exception as e:
-        # Send crash alerts to Discord
         import traceback
         err_msg = traceback.format_exc()
         print(f"System error: {e}")
-        discord.send_error_alert(err_msg)
 
 if __name__ == "__main__":
     main()

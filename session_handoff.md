@@ -1,6 +1,6 @@
 # Session Handoff: Automated Earnings Options Advisory Bot
 
-Single-mode advisory-only system. No order execution. Runs at 2:00 PM CT daily.
+Single-mode advisory-only system. No order execution. Runs at 1:00 PM CT daily.
 
 ## Architecture
 
@@ -33,7 +33,7 @@ Single-mode advisory-only system. No order execution. Runs at 2:00 PM CT daily.
 ## Crontab
 
 ```text
-# Afternoon Advisory (2:00 PM CT, Mon-Fri)
+# Afternoon Advisory (1:00 PM CT, Mon-Fri)
 00 14 * * 1-5 cd /home/ubuntu/options-strat && python3 automated_system.py --mode afternoon >> afternoon.log 2>&1
 
 # Monthly Retrain (1st at 6:30 AM CT)

@@ -22,8 +22,13 @@ def get_monitored_tickers():
     return [r[0] for r in rows]
 
 def safe_val(v, fmt=None, default="N/A"):
-    if v is None or (isinstance(v, float) and np.isnan(v)):
+    if v is None:
         return default
+    try:
+        if np.isnan(v):
+            return default
+    except (TypeError, ValueError):
+        pass
     if fmt:
         return fmt % v
     return v
@@ -32,14 +37,12 @@ def _get_calendar_date(ticker_symbol):
     try:
         t = yf.Ticker(ticker_symbol)
         cal = t.calendar
-        if cal is None or cal.empty:
+        if not cal or not isinstance(cal, dict):
             return None
-        ed = cal.get('Earnings Date')
-        if ed is not None and hasattr(ed, 'iloc'):
-            ed = ed.iloc[0]
-        if not hasattr(ed, 'hour'):
+        ed_list = cal.get('Earnings Date')
+        if not ed_list or not isinstance(ed_list, list) or not ed_list:
             return None
-        return ed
+        return ed_list[0]
     except Exception:
         return None
 
@@ -54,7 +57,7 @@ def _fetch_earnings_with_session(ticker_symbol):
     return None
 
 def run_afternoon_execution():
-    print("\n--- Running Afternoon Trade Scan (2:00 PM CT) ---")
+    print("\n--- Running Afternoon Trade Scan (1:00 PM CT) ---")
     today = datetime.now()
     today_str = today.strftime('%Y-%m-%d')
     tomorrow_str = (today + timedelta(days=1)).strftime('%Y-%m-%d')
@@ -68,24 +71,36 @@ def run_afternoon_execution():
         if ed is None:
             continue
         ed_date = ed.strftime('%Y-%m-%d') if hasattr(ed, 'strftime') else str(ed)[:10]
-        hour = ed.hour if hasattr(ed, 'hour') else 0
-        is_bmo = hour < 12
-
-        if ed_date == today_str and not is_bmo:
-            matching.append((t, ed_date, "After-Hours (AMC)"))
-        elif ed_date == tomorrow_str and is_bmo:
-            matching.append((t, ed_date, "Pre-Market (BMO)"))
+        if ed_date == today_str or ed_date == tomorrow_str:
+            matching.append((t, ed_date))
 
     print(f"Found {len(matching)} tickers with calendar dates matching today/tomorrow.")
 
     print(f"Fetching session details for {len(matching)} matching tickers...")
     earnings_data = {}
-    for t, _, _ in matching:
+    for t, _ in matching:
         df_ed = _fetch_earnings_with_session(t)
         if df_ed is not None:
             earnings_data[t] = df_ed
 
-    candidates = matching
+    candidates = []
+    for t, ed_str in matching:
+        df_ed = earnings_data.get(t)
+        if df_ed is not None and not df_ed.empty:
+            for idx in df_ed.index:
+                idx_str = idx.strftime('%Y-%m-%d')
+                hour = idx.hour
+                is_bmo = hour < 12
+                if idx_str == today_str and not is_bmo:
+                    candidates.append((t, idx_str, "After-Hours (AMC)"))
+                    break
+                elif idx_str == tomorrow_str and is_bmo:
+                    candidates.append((t, idx_str, "Pre-Market (BMO)"))
+                    break
+                elif idx_str == ed_str:
+                    candidates.append((t, idx_str, "Pre-Market (BMO)" if is_bmo else "After-Hours (AMC)"))
+                    break
+
     print(f"Found {len(candidates)} potential candidates reporting today AMC or tomorrow BMO.")
 
     try:
@@ -174,9 +189,9 @@ def run_afternoon_execution():
             df_earn = earnings_data.get(t)
             if df_earn is not None and not df_earn.empty:
                 latest = df_earn.iloc[0]
-                eps_est = safe_val(latest.get('EPS Estimate'), None)
-                eps_reported = safe_val(latest.get('Reported EPS'), None)
-                eps_surprise = safe_val(latest.get('Surprise(%)'), None)
+                eps_est = safe_val(latest.get('EPS Estimate'), default=None)
+                eps_reported = safe_val(latest.get('Reported EPS'), default=None)
+                eps_surprise = safe_val(latest.get('Surprise(%)'), default=None)
         except Exception:
             pass
 
@@ -249,7 +264,7 @@ def main():
         "--mode",
         required=True,
         choices=["afternoon"],
-        help="afternoon (2:00 PM CT advisory)"
+        help="afternoon (1:00 PM CT advisory)"
     )
     args = parser.parse_args()
 

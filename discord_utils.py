@@ -57,7 +57,7 @@ def send_trade_execution(ticker, strategy, details):
             "color": 3066993, # Green
             "fields": fields,
             "footer": {
-                "text": "Execution triggers daily at 2:00 PM CT"
+                "text": "Execution triggers daily at 1:00 PM CT"
             },
             "timestamp": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
         }]
@@ -201,7 +201,7 @@ def send_afternoon_advisory(date_str, candidates, viable, skipped):
             "description": "\n---\n".join(parts),
             "color": 3066993 if viable else (15158332 if candidates else 3447003),
             "footer": {
-                "text": "Advisory runs daily at 2:00 PM CT"
+                "text": "Advisory runs daily at 1:00 PM CT"
             },
             "timestamp": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
         }]

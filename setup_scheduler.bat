@@ -17,15 +17,15 @@ echo Script directory identified: %SCRIPT_DIR%
 echo Target system file: %SYSTEM_PATH%
 echo.
 
-:: 1. Register Afternoon Advisory (2:00 PM CT)
-echo Registering Afternoon Advisory (2:00 PM CT)...
-schtasks /create /tn "EarningsBot_AfternoonExecution" /tr "python \"%SYSTEM_PATH%\" --mode afternoon" /sc daily /st 14:00 /f
+:: 1. Register Afternoon Advisory (1:00 PM CT)
+echo Registering Afternoon Advisory (1:00 PM CT)...
+schtasks /create /tn "EarningsBot_AfternoonExecution" /tr "python \"%SYSTEM_PATH%\" --mode afternoon" /sc daily /st 13:00 /f
 
 echo.
 echo === Setup Complete! ===
 echo.
 echo Task successfully scheduled in Windows Task Scheduler:
-echo  1. EarningsBot_AfternoonExecution (Runs daily at 2:00 PM CT)
+echo  1. EarningsBot_AfternoonExecution (Runs daily at 1:00 PM CT)
 echo.
 echo IMPORTANT: Make sure you have set your Environment Variables:
 echo  - APCA_API_KEY_ID

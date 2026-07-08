@@ -110,3 +110,38 @@ Processing candidate: GIS
   Adjusted Required Move: 4.83%
 Advisory sent: 2 viable, 0 skipped of 2 candidates.
 python3: can't open file '/home/ubuntu/options-strat/automated_system.py': [Errno 2] No such file or directory
+
+--- Running Afternoon Trade Scan (2:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 0 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 0 matching tickers...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+Advisory sent: 0 viable, 0 skipped of 0 candidates.
+
+--- Running Afternoon Trade Scan (2:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 0 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 0 matching tickers...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+Advisory sent: 0 viable, 0 skipped of 0 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 0 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 0 matching tickers...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+Advisory sent: 0 viable, 0 skipped of 0 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 0 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 0 matching tickers...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+Advisory sent: 0 viable, 0 skipped of 0 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 0 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 0 matching tickers...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+Advisory sent: 0 viable, 0 skipped of 0 candidates.

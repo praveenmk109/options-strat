@@ -144,7 +144,7 @@ def build_candidate_block(v):
         vol_line = f"\n**Call Vol/OI**: {fmt(cv)}/{fmt(coi)}  **Put Vol/OI**: {fmt(pv)}/{fmt(poi)}"
 
     align = v.get('alignment', 0)
-    badge = "✅ Go" if align >= -0.1 else "⚠️ Go (Contrarian)"
+    badge = "✅ Pass" if align >= -0.1 else "⚠️ Pass (Contrarian)"
 
     block = (
         f"**✅ {v['ticker']} ({v['strategy']})**\n"

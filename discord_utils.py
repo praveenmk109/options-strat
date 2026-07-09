@@ -2,7 +2,7 @@ import config
 import os
 import json
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime
 
 WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL", "")
 
@@ -33,97 +33,7 @@ def send_discord_payload(payload):
         print(f"Failed to send Discord alert: {e}")
     return False
 
-def send_trade_execution(ticker, strategy, details):
-    """
-    Sends an alert when a trade is automatically entered on Alpaca.
-    """
-    fields = [
-        {"name": "Ticker", "value": ticker, "inline": True},
-        {"name": "Strategy", "value": strategy, "inline": True},
-        {"name": "Order ID", "value": details.get("order_id", "N/A"), "inline": True},
-        {"name": "Put Strikes", "value": details.get("put_strikes", "N/A"), "inline": True},
-        {"name": "Call Strikes", "value": details.get("call_strikes", "N/A"), "inline": True},
-        {"name": "Est. Credit", "value": f"${details.get('credit', 0.0):.2f}", "inline": True},
-        {"name": "Implied Move", "value": f"{details.get('implied_move', 0.0):.2f}%", "inline": True},
-        {"name": "Historical Move", "value": f"{details.get('hist_move', 0.0):.2f}%", "inline": True},
-        {"name": "Capital Allocation", "value": f"${details.get('margin', 0.0):.2f}", "inline": True}
-    ]
-    
-    payload = {
-        "username": "Earnings Trading Bot",
-        "embeds": [{
-            "title": f"🚀 Trade Executed: {ticker} {strategy}",
-            "description": f"Successfully placed defined-risk options credit spread order on Alpaca paper trading.",
-            "color": 3066993, # Green
-            "fields": fields,
-            "footer": {
-                "text": "Execution triggers daily at 1:00 PM CT"
-            },
-            "timestamp": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
-        }]
-    }
-    return send_discord_payload(payload)
 
-def send_trade_review(date_str, results_summary, trades_detail):
-    """
-    Sends the next-day review Embed with closed trade details, P&L, and threshold adjustments.
-    """
-    # Build summary description
-    total_trades = len(trades_detail)
-    wins = sum(1 for t in trades_detail if t['pnl'] >= 0)
-    total_pnl = sum(t['pnl'] for t in trades_detail)
-    
-    description = (
-        f"**Closed Trades**: {total_trades}\n"
-        f"**Win Rate**: {wins}/{total_trades} ({ (wins/total_trades*100) if total_trades > 0 else 0:.1f}%)\n"
-        f"**Daily P&L**: **${total_pnl:+.2f}**\n\n"
-        "**Trade Breakdowns:**"
-    )
-    
-    fields = []
-    for t in trades_detail:
-        pnl_str = f"${t['pnl']:+.2f}"
-        details_val = (
-            f"**Realized Gap**: {t['realized_gap']:.2f}% (Expected: {t['implied_gap']:.2f}%)\n"
-            f"**Strikes**: Put: {t['put_strikes']} | Call: {t['call_strikes']}\n"
-            f"**P&L**: **{pnl_str}**\n"
-            f"**Threshold**: {t['multiplier_change']}"
-        )
-        fields.append({
-            "name": f"{'✅' if t['pnl'] >= 0 else '❌'} {t['ticker']} - {t['strategy']}",
-            "value": details_val,
-            "inline": False
-        })
-        
-    payload = {
-        "username": "Earnings Trading Bot",
-        "embeds": [{
-            "title": f"📊 Daily Earnings Performance Review - {date_str}",
-            "description": description,
-            "color": 8359053 if total_pnl >= 0 else 15158332, # Grey/Green if flat/up, Red if down
-            "fields": fields,
-            "footer": {
-                "text": "Performance review runs daily at 8:45 AM CT"
-            },
-            "timestamp": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
-        }]
-    }
-    return send_discord_payload(payload)
-
-def send_error_alert(error_message):
-    """
-    Sends an error notification if the automated system encounters a problem.
-    """
-    payload = {
-        "username": "Earnings Trading Bot",
-        "embeds": [{
-            "title": "⚠️ System Error Encountered",
-            "description": f"The automated earnings system encountered an execution error:\n```\n{error_message}\n```",
-            "color": 15158332, # Red
-            "timestamp": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
-        }]
-    }
-    return send_discord_payload(payload)
 
 def build_candidate_block(v):
     wr = f"{v.get('strategy_win_rate', 0):.1f}%" if v.get('strategy_win_rate') else "N/A"
@@ -199,16 +109,12 @@ def send_afternoon_advisory(date_str, candidates, viable, skipped):
             skip_summary += f"\n...and {len(skipped)-5} more"
         parts.append(f"**Skipped:**\n{skip_summary}")
 
+    body = "\n---\n".join(parts)
+    if len(body) > 1900:
+        body = body[:1900] + "\n\n*(truncated)*"
+
     payload = {
         "username": "Earnings Trading Bot",
-        "embeds": [{
-            "title": "📋 Afternoon Trade Advisory",
-            "description": "\n---\n".join(parts),
-            "color": 3066993 if viable else (15158332 if candidates else 3447003),
-            "footer": {
-                "text": "Advisory runs daily at 1:00 PM CT"
-            },
-            "timestamp": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
-        }]
+        "content": body
     }
     return send_discord_payload(payload)

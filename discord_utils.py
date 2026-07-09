@@ -126,47 +126,52 @@ def send_error_alert(error_message):
     return send_discord_payload(payload)
 
 def build_candidate_block(v):
-    put_str = f"${v['short_put']}/{v['long_put']}" if v['short_put'] else "None"
-    call_str = f"${v['short_call']}/{v['long_call']}" if v['short_call'] else "None"
     wr = f"{v.get('strategy_win_rate', 0):.1f}%" if v.get('strategy_win_rate') else "N/A"
-
-    eps_line = ""
-    ee, er = v.get('eps_estimate'), v.get('eps_reported')
-    if ee is not None and er is not None:
-        s = v.get('eps_surprise')
-        ss = f" ({s:+.1f}% surprise)" if s is not None else ""
-        eps_line = f"\n**Last EPS**: Est ${ee:.2f} vs ${er:.2f}{ss}"
-
-    vol_line = ""
-    cv, coi, pv, poi = v.get('call_volume'), v.get('call_open_interest'), v.get('put_volume'), v.get('put_open_interest')
-    if any(x is not None for x in [cv, coi, pv, poi]):
-        fmt = lambda x: f"{x:,}" if x is not None else "?"
-        vol_line = f"\n**Call Vol/OI**: {fmt(cv)}/{fmt(coi)}  **Put Vol/OI**: {fmt(pv)}/{fmt(poi)}"
+    session_short = "AMC" if "AMC" in v['session'] else "BMO"
+    exp_date = datetime.strptime(v['expiration_yymmdd'], '%y%m%d').strftime('%b %d')
 
     align = v.get('alignment', 0)
     badge = "✅ Pass" if align >= -0.1 else "⚠️ Pass (Contrarian)"
 
     block = (
-        f"**✅ {v['ticker']} ({v['strategy']})**\n"
-        f"**Price**: ${v['price']:.2f} | **Session**: {v['session']}\n"
-        f"**Straddle**: ${v['straddle_price']:.2f} (±{v['implied_move']:.2f}%) | **Hist**: {v['hist_move']:.2f}%\n"
-        f"**{badge}** | **Win Rate**: {wr} | **Expiry**: {v['expiration_yymmdd']}"
+        f"{v['ticker']} · {v['strategy']} · {session_short} {exp_date}\n"
+        f"\n"
+        f"  • Entry: ${v['price']:.2f}  • Credit: ${v['est_credit']:.2f}  • Risk: ${v['margin']:.0f}\n"
     )
+
+    if v['short_put'] and v['short_call']:
+        block += f"  • Sell ${v['short_put']}/{v['long_put']} put + ${v['short_call']}/{v['long_call']} call\n"
+    elif v['short_put']:
+        block += f"  • Sell ${v['short_put']} put / Buy ${v['long_put']} put\n"
+    elif v['short_call']:
+        block += f"  • Sell ${v['short_call']} call / Buy ${v['long_call']} call\n"
+
+    block += f"  • Expected move: ±{v['implied_move']:.2f}%  • Historical: ±{v['hist_move']:.2f}%\n"
+    block += f"  • {badge}  • Sim win rate: {wr}\n"
 
     c = v.get('consensus', {})
     upside = v.get('target_upside')
     if c.get('recommendation'):
-        rec = c['recommendation'].title()
+        rec = c['recommendation'].replace('_', ' ').title()
         rm = f" ({c['recommendation_mean']:.2f})" if c.get('recommendation_mean') else ""
         pt = f"${c['target_mean']:.2f}" if c.get('target_mean') else "N/A"
         us = f" ({upside:+.1f}%)" if upside is not None else ""
-        ac = f" | {int(c['analyst_count'])} analysts" if c.get('analyst_count') else ""
-        block += f"\n**Analyst Consensus**: {rec}{rm} | Target {pt}{us}{ac}"
+        ac = f" ({int(c['analyst_count'])} analysts)" if c.get('analyst_count') else ""
+        block += f"  • Street says: {rec}{rm} → {pt}{us}{ac}\n"
 
-    block += (
-        f"\n**Est. Credit**: ${v['est_credit']:.2f} | **Max Risk**: ${v['margin']:.2f}\n"
-        f"**Put Strikes**: {put_str}  **Call Strikes**: {call_str}{vol_line}{eps_line}"
-    )
+    vol_parts = []
+    cv, coi, pv, poi = v.get('call_volume'), v.get('call_open_interest'), v.get('put_volume'), v.get('put_open_interest')
+    if any(x is not None for x in [cv, coi, pv, poi]):
+        fmt = lambda x: f"{x:,}" if x is not None else "?"
+        vol_parts.append(f"Call Vol/OI: {fmt(cv)}/{fmt(coi)}")
+        vol_parts.append(f"Put Vol/OI: {fmt(pv)}/{fmt(poi)}")
+        block += f"  • {'  • '.join(vol_parts)}\n"
+
+    ee, er = v.get('eps_estimate'), v.get('eps_reported')
+    if ee is not None and er is not None:
+        s = v.get('eps_surprise')
+        ss = f" ({s:+.1f}% surprise)" if s is not None else ""
+        block += f"  • Last EPS: Est ${ee:.2f} vs ${er:.2f}{ss}\n"
 
     analyst_calls = v.get('analyst_calls', [])
     if analyst_calls:

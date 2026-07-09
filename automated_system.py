@@ -97,9 +97,6 @@ def run_afternoon_execution():
                 elif idx_str == tomorrow_str and is_bmo:
                     candidates.append((t, idx_str, "Pre-Market (BMO)"))
                     break
-                elif idx_str == ed_str:
-                    candidates.append((t, idx_str, "Pre-Market (BMO)" if is_bmo else "After-Hours (AMC)"))
-                    break
 
     print(f"Found {len(candidates)} potential candidates reporting today AMC or tomorrow BMO.")
 
@@ -201,21 +198,23 @@ def run_afternoon_execution():
 
         analyst_calls = alpaca.get_analyst_calls(t, max_count=3)
 
-        wing_width = 1.0 if price < 100.0 else 2.0
+        ww = int(1 if price < 100 else 2)
+        straddle_buffer = 1.5
+        offset = round(straddle_price * straddle_buffer / ww) * ww
 
         short_put, long_put = None, None
         short_call, long_call = None, None
 
         if suggested_strat in ["Iron Condor", "Bull Put"]:
-            short_put = round(price * 0.95)
-            long_put = short_put - wing_width
+            short_put = round(price / ww) * ww - offset
+            long_put = short_put - ww
 
         if suggested_strat in ["Iron Condor", "Bear Call"]:
-            short_call = round(price * 1.05)
-            long_call = short_call + wing_width
+            short_call = round(price / ww) * ww + offset
+            long_call = short_call + ww
 
-        est_credit = 0.35 * wing_width if suggested_strat == "Iron Condor" else 0.20 * wing_width
-        margin = wing_width * 100.0
+        est_credit = 0.35 * ww if suggested_strat == "Iron Condor" else 0.20 * ww
+        margin = ww * 100.0
 
         viable.append({
             "ticker": t,
@@ -227,7 +226,7 @@ def run_afternoon_execution():
             "short_call": short_call,
             "long_call": long_call,
             "price": price,
-            "wing_width": wing_width,
+            "wing_width": ww,
             "est_credit": est_credit,
             "margin": margin,
             "implied_move": implied_move,

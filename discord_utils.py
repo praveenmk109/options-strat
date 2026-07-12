@@ -118,3 +118,33 @@ def send_afternoon_advisory(date_str, candidates, viable, skipped):
         "content": body
     }
     return send_discord_payload(payload)
+
+
+def send_weekly_preview(weekly_groups):
+    parts = ["📋 **Earnings Preview — Week Ahead**\n"]
+    for day_header, stocks in weekly_groups:
+        parts.append(f"**{day_header}**")
+        for s in stocks:
+            wr = f"{s['win_rate']:.0f}%" if s['win_rate'] else "N/A"
+            flag = " ⚠️" if s['win_rate'] and s['win_rate'] < 70 else ""
+            parts.append(
+                f"  • {s['ticker']:6s} ${s['price']:.0f}  "
+                f"| Hist ±{s['hist_abs']:.1f}% (net {s['hist_net']:+.1f}%)  "
+                f"| Sim→ {s['strategy']} {wr}{flag}"
+            )
+        parts.append("")
+
+    body = "\n".join(parts) + (
+        "🔔 **Daily advisories** at 1 PM CT Mon-Fri for IV crush edge check.\n"
+        "*Strategy from 5% OTM historical backtest, not net drift. Net shown for reference.*\n"
+        "*⚠️ Low confidence (<70% sim win rate).*"
+    )
+
+    if len(body) > 1900:
+        body = body[:1900] + "\n\n*(truncated)*"
+
+    payload = {
+        "username": "Earnings Trading Bot",
+        "content": body
+    }
+    return send_discord_payload(payload)

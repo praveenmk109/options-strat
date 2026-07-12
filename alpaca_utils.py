@@ -157,6 +157,32 @@ def get_option_volume_and_oi(ticker, expiration_yymmdd, call_strike, put_strike)
         print(f"Error fetching option volume for {ticker}: {e}")
         return None, None, None, None
 
+def get_option_price(ticker, expiration_yymmdd, strike, option_type):
+    try:
+        exp_date = datetime.strptime(expiration_yymmdd, "%y%m%d").strftime("%Y-%m-%d")
+        t = yf.Ticker(ticker)
+        avail = t.options
+        if exp_date not in avail:
+            target = datetime.strptime(expiration_yymmdd, "%y%m%d").date()
+            future = [d for d in avail if datetime.strptime(d, '%Y-%m-%d').date() >= target]
+            if not future:
+                return None
+            exp_date = future[0]
+        chain = t.option_chain(exp_date)
+        df = chain.calls if option_type == "call" else chain.puts
+        row = df.iloc[(df['strike'] - strike).abs().argsort()[:1]]
+        bid = row['bid'].values[0]
+        ask = row['ask'].values[0]
+        if pd.isna(bid) and pd.isna(ask):
+            mid = row['lastPrice'].values[0]
+            return None if pd.isna(mid) else float(mid)
+        bid = 0 if pd.isna(bid) else float(bid)
+        ask = 0 if pd.isna(ask) else float(ask)
+        return (bid + ask) / 2
+    except Exception as e:
+        print(f"Error fetching option price for {ticker}: {e}")
+        return None
+
 def get_analyst_calls(ticker, max_count=3):
     """Get most recent analyst upgrades/downgrades/price target changes."""
     try:

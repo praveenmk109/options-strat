@@ -198,8 +198,8 @@ def run_afternoon_execution():
 
         analyst_calls = alpaca.get_analyst_calls(t, max_count=3)
 
-        ww = int(1 if price < 100 else 2)
-        straddle_buffer = 1.5
+        ww = int(max(1, round(straddle_price * 0.5)))
+        straddle_buffer = 1.2
         offset = round(straddle_price * straddle_buffer / ww) * ww
 
         short_put, long_put = None, None
@@ -213,7 +213,19 @@ def run_afternoon_execution():
             short_call = round(price / ww) * ww + offset
             long_call = short_call + ww
 
-        est_credit = 0.35 * ww if suggested_strat == "Iron Condor" else 0.20 * ww
+        est_credit = None
+        if suggested_strat == "Bear Call" and short_call:
+            short_price = alpaca.get_option_price(t, expiration_yymmdd, short_call, "call")
+            long_price = alpaca.get_option_price(t, expiration_yymmdd, long_call, "call")
+            if short_price is not None and long_price is not None:
+                est_credit = short_price - long_price
+        elif short_put:
+            short_price = alpaca.get_option_price(t, expiration_yymmdd, short_put, "put")
+            long_price = alpaca.get_option_price(t, expiration_yymmdd, long_put, "put")
+            if short_price is not None and long_price is not None:
+                est_credit = short_price - long_price
+        if est_credit is None or est_credit <= 0:
+            est_credit = 0.20 * ww
         margin = ww * 100.0
 
         viable.append({
@@ -257,13 +269,112 @@ def run_afternoon_execution():
 
     return bool(result)
 
+def run_weekly_preview():
+    print("\n--- Running Weekly Earnings Preview (Sunday 8 AM CT) ---")
+    today = datetime.now()
+    end_date = today + timedelta(days=7)
+
+    tickers = get_monitored_tickers()
+    print(f"Scanning {len(tickers)} tickers for this week's earnings...")
+
+    summ = {}
+    try:
+        df = pd.read_csv(os.path.join(SCRIPT_DIR, "sp500_earnings_summary.csv"))
+        for _, r in df.iterrows():
+            summ[r['Ticker']] = r
+    except Exception:
+        pass
+
+    sims = {}
+    try:
+        df = pd.read_csv(SIMS_CSV)
+        for _, r in df.iterrows():
+            sims[r['Ticker']] = r
+    except Exception:
+        pass
+
+    week = []
+    for t in tickers:
+        ed = _get_calendar_date(t)
+        if ed is None:
+            continue
+        if today.date() <= ed <= end_date.date():
+            try:
+                tk = yf.Ticker(t)
+                price = tk.info.get('currentPrice') or tk.info.get('regularMarketPrice')
+            except Exception:
+                price = None
+            if not price:
+                continue
+            win_rate = None
+            strategy = "Bull Put"
+            if t in sims:
+                r = sims[t]
+                bps = r.get('bps_win_rate_5', 0)
+                bcs = r.get('bcs_win_rate_5', 0)
+                if bps >= bcs:
+                    strategy = "Bull Put"
+                    win_rate = float(bps)
+                else:
+                    strategy = "Bear Call"
+                    win_rate = float(bcs)
+
+            if t not in summ:
+                continue
+            hist_abs = float(summ[t]['Avg Abs Change (%)'])
+            hist_net = float(summ[t]['Avg Net Change (%)'])
+
+            weekday_num = ed.weekday()
+            day_name = ed.strftime('%A')
+            date_str = ed.strftime('%b %d')
+
+            week.append({
+                "ticker": t,
+                "price": price,
+                "date": ed,
+                "day_name": day_name,
+                "date_str": date_str,
+                "hist_abs": hist_abs,
+                "hist_net": hist_net,
+                "strategy": strategy,
+                "win_rate": win_rate,
+            })
+
+    week.sort(key=lambda x: (x['date'], x['ticker']))
+    print(f"Found {len(week)} tickers with earnings this week.")
+
+    if not week:
+        print("No earnings this week. Skipping preview.")
+        return False
+
+    groups = []
+    current_key = None
+    current_group = None
+    for s in week:
+        key = f"{s['day_name']} {s['date_str']}"
+        if key != current_key:
+            if current_group is not None:
+                groups.append((current_key, current_group))
+            current_key = key
+            current_group = []
+        current_group.append(s)
+    if current_group is not None:
+        groups.append((current_key, current_group))
+
+    result = discord.send_weekly_preview(groups)
+    if result:
+        print(f"Weekly preview sent: {len(week)} tickers across {len(groups)} days.")
+    else:
+        print("Weekly preview send failed.")
+    return bool(result)
+
 def main():
     parser = argparse.ArgumentParser(description="Automated Earnings Option Trading System")
     parser.add_argument(
         "--mode",
         required=True,
-        choices=["afternoon"],
-        help="afternoon (1:00 PM CT advisory)"
+        choices=["afternoon", "weekly"],
+        help="afternoon (1:00 PM CT advisory) | weekly (Sunday 8 AM CT preview)"
     )
     args = parser.parse_args()
 
@@ -273,6 +384,8 @@ def main():
     try:
         if args.mode == "afternoon":
             run_afternoon_execution()
+        elif args.mode == "weekly":
+            run_weekly_preview()
     except Exception as e:
         import traceback
         err_msg = traceback.format_exc()

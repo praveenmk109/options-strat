@@ -129,15 +129,14 @@ def send_weekly_preview(weekly_groups):
             flag = " ⚠️" if s['win_rate'] and s['win_rate'] < 70 else ""
             parts.append(
                 f"  • {s['ticker']:6s} ${s['price']:.0f}  "
-                f"| Hist ±{s['hist_abs']:.1f}% (net {s['hist_net']:+.1f}%)  "
-                f"| Sim→ {s['strategy']} {wr}{flag}"
+                f"· ±{s['hist_abs']:.1f}% / {s['hist_net']:+.1f}%  "
+                f"· {s['strategy']} {wr}{flag}"
             )
         parts.append("")
 
     body = "\n".join(parts) + (
-        "🔔 **Daily advisories** at 1 PM CT Mon-Fri for IV crush edge check.\n"
-        "*Strategy from 5% OTM historical backtest, not net drift. Net shown for reference.*\n"
-        "*⚠️ Low confidence (<70% sim win rate).*"
+        "🔔 **Daily advisories** at 1 PM CT Mon-Fri for edge check.\n"
+        "*Strategy @ 5% OTM backtest, net for reference. ⚠️ = <70% win rate.*"
     )
 
     if len(body) > 1900:

@@ -378,9 +378,6 @@ def main():
     )
     args = parser.parse_args()
 
-    if alpaca.API_KEY == "YOUR_API_KEY":
-        print("[WARNING] Running in DRY-RUN mode. Alpaca credentials are not set.")
-
     try:
         if args.mode == "afternoon":
             run_afternoon_execution()

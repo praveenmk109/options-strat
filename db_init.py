@@ -16,7 +16,7 @@ def init_db():
     CREATE TABLE IF NOT EXISTS stocks_metadata (
         ticker TEXT PRIMARY KEY,
         avg_abs_move REAL NOT NULL,
-        dynamic_multiplier REAL NOT NULL DEFAULT 1.5,
+        dynamic_multiplier REAL NOT NULL DEFAULT 1.2,
         consecutive_wins INTEGER NOT NULL DEFAULT 0
     )
     """)
@@ -66,7 +66,7 @@ def seed_data(conn, cursor):
         # Insert or ignore to avoid duplicates on re-runs
         cursor.execute("""
         INSERT OR IGNORE INTO stocks_metadata (ticker, avg_abs_move, dynamic_multiplier, consecutive_wins)
-        VALUES (?, ?, 1.5, 0)
+        VALUES (?, ?, 1.2, 0)
         """, (ticker, avg_move))
         
         # If it was already there, update avg_abs_move in case it changed

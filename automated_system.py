@@ -60,7 +60,12 @@ def run_afternoon_execution():
     print("\n--- Running Afternoon Trade Scan (1:00 PM CT) ---")
     today = datetime.now()
     today_str = today.strftime('%Y-%m-%d')
-    tomorrow_str = (today + timedelta(days=1)).strftime('%Y-%m-%d')
+    days_ahead = 1
+    if today.weekday() == 4:  # Friday → skip to Monday
+        days_ahead = 3
+    elif today.weekday() == 5:  # Saturday → skip to Monday
+        days_ahead = 2
+    tomorrow_str = (today + timedelta(days=days_ahead)).strftime('%Y-%m-%d')
 
     tickers = get_monitored_tickers()
 
@@ -85,6 +90,7 @@ def run_afternoon_execution():
 
     candidates = []
     for t, ed_str in matching:
+        session = None
         df_ed = earnings_data.get(t)
         if df_ed is not None and not df_ed.empty:
             for idx in df_ed.index:
@@ -92,11 +98,29 @@ def run_afternoon_execution():
                 hour = idx.hour
                 is_bmo = hour < 12
                 if idx_str == today_str and not is_bmo:
-                    candidates.append((t, idx_str, "After-Hours (AMC)"))
+                    session = "After-Hours (AMC)"
                     break
                 elif idx_str == tomorrow_str and is_bmo:
-                    candidates.append((t, idx_str, "Pre-Market (BMO)"))
+                    session = "Pre-Market (BMO)"
                     break
+        if session is None:
+            if ed_str == today_str:
+                session = "After-Hours (AMC)"
+            elif ed_str == tomorrow_str:
+                session = "Pre-Market (BMO)"
+        if session:
+            if df_ed is not None and not df_ed.empty:
+                for idx in df_ed.index:
+                    idx_str = idx.strftime('%Y-%m-%d')
+                    if idx_str == ed_str:
+                        if 'Reported EPS' in df_ed.columns:
+                            reported_eps = df_ed.loc[idx, 'Reported EPS']
+                            if pd.notna(reported_eps):
+                                print(f"Skipping {t}: Already reported (EPS: {reported_eps})")
+                                session = None
+                        break
+        if session:
+            candidates.append((t, ed_str, session))
 
     print(f"Found {len(candidates)} potential candidates reporting today AMC or tomorrow BMO.")
 
@@ -143,7 +167,7 @@ def run_afternoon_execution():
         if consensus.get('target_mean') and price > 0:
             target_upside = (consensus['target_mean'] / price - 1) * 100
 
-        suggested_strat = "Iron Condor"
+        suggested_strat = "Bull Put"
         strategy_win_rate = 0
         if df_sims is not None:
             try:
@@ -167,7 +191,7 @@ def run_afternoon_execution():
             if suggested_strat == "Bear Call":
                 alignment = -alignment
 
-        adj_multiplier = multiplier * (1.0 + 0.2 * max(-1.0, min(1.0, -alignment)))
+        adj_multiplier = multiplier * (1.0 + 0.1 * max(-1.0, min(1.0, -alignment)))
         adj_required_move = avg_move * adj_multiplier
 
         print(f"  Live Implied Move: {implied_move:.2f}%")

@@ -85,31 +85,49 @@ def build_candidate_block(v):
 
 
 def send_afternoon_advisory(date_str, candidates, viable, skipped):
-    parts = []
-    if viable:
-        parts.append(f"Found {len(viable)} actionable trade(s) for today AMC / tomorrow BMO:\n")
-        for v in viable:
-            parts.append(build_candidate_block(v))
-    elif candidates:
-        parts.append(f"Evaluated {len(candidates)} candidate(s), but none passed filters.\n")
-    else:
-        parts.append("No upcoming earnings candidates found for today AMC or tomorrow BMO.\n")
+    def send(content):
+        payload = {"username": "Earnings Trading Bot", "content": content}
+        return send_discord_payload(payload)
 
-    if skipped:
+    if not viable and not candidates:
+        return send("No upcoming earnings candidates found for today AMC or tomorrow BMO.\n")
+
+    if not viable:
         skip_summary = "\n".join(f"• {t}: {r}" for t, r in skipped[:5])
         if len(skipped) > 5:
             skip_summary += f"\n...and {len(skipped)-5} more"
-        parts.append(f"**Skipped:**\n{skip_summary}")
+        return send(f"Evaluated {len(candidates)} candidate(s), but none passed filters.\n\n**Skipped:**\n{skip_summary}")
 
-    body = "\n---\n".join(parts)
-    if len(body) > 1900:
-        body = body[:1900] + "\n\n*(truncated)*"
+    # Build viable blocks
+    blocks = [build_candidate_block(v) for v in viable]
 
-    payload = {
-        "username": "Earnings Trading Bot",
-        "content": body
-    }
-    return send_discord_payload(payload)
+    # Send viable in chunks that fit Discord's 1900 char limit
+    header = f"Found {len(viable)} actionable trade(s) for today AMC / tomorrow BMO:\n"
+    sent = False
+    chunk = []
+    chunk_len = len(header)
+    for block in blocks:
+        block_len = len(block) + 4  # separator
+        if chunk and chunk_len + block_len > 1850:
+            body = header + "\n---\n".join(chunk)
+            send(body)
+            header = ""  # only first message gets header
+            chunk = []
+            chunk_len = 0
+        chunk.append(block)
+        chunk_len += block_len
+    if chunk:
+        body = header + "\n---\n".join(chunk) if header else "\n---\n".join(chunk)
+        send(body)
+
+    # Send skipped as follow-up
+    if skipped:
+        skip_summary = "\n".join(f"• {t}: {r}" for t, r in skipped[:10])
+        if len(skipped) > 10:
+            skip_summary += f"\n...and {len(skipped)-10} more"
+        send(f"**Skipped:**\n{skip_summary}")
+
+    return True
 
 
 def send_weekly_preview(weekly_groups):

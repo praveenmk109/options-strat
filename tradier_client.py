@@ -1,8 +1,8 @@
 import os
 import requests
-from datetime import datetime
 
 BASE_PROD = "https://api.tradier.com/v1"
+REQUEST_TIMEOUT = 10  # seconds
 
 
 class TradierError(Exception):
@@ -22,7 +22,7 @@ class TradierClient:
         })
 
     def _get(self, path, params=None):
-        res = self.session.get(f"{self.base}{path}", params=params)
+        res = self.session.get(f"{self.base}{path}", params=params, timeout=REQUEST_TIMEOUT)
         if res.status_code == 401:
             raise TradierError("Unauthorized — check TRADIER_API_KEY")
         if res.status_code == 400:
@@ -39,21 +39,6 @@ class TradierClient:
             return q
         except (KeyError, TypeError, IndexError):
             return None
-
-    def get_quotes(self, symbols, greeks=True):
-        if not symbols:
-            return {}
-        data = self._get("/markets/quotes", {
-            "symbols": ",".join(symbols),
-            "greeks": str(greeks).lower()
-        })
-        try:
-            quotes = data["quotes"]["quote"]
-            if isinstance(quotes, dict):
-                return {quotes["symbol"]: quotes}
-            return {q["symbol"]: q for q in quotes}
-        except (KeyError, TypeError):
-            return {}
 
     def get_option_expirations(self, symbol):
         data = self._get("/markets/options/expirations", {"symbol": symbol})
@@ -78,19 +63,3 @@ class TradierClient:
             return opts
         except (KeyError, TypeError):
             return []
-
-    def get_clock(self):
-        try:
-            data = self._get("/markets/clock")
-            return data.get("clock", {}).get("state") == "open"
-        except Exception:
-            return None
-
-
-def format_osi(underlying, expiry_str, opt_type_str, strike):
-    dt = datetime.strptime(expiry_str, "%Y-%m-%d")
-    yymmdd = dt.strftime("%y%m%d")
-    strike_cents = int(round(strike * 1000))
-    strike_str = f"{strike_cents:08d}"
-    symbol_type = "C" if opt_type_str.upper() in ("C", "CALL") else "P"
-    return f"{underlying}{yymmdd}{symbol_type}{strike_str}"

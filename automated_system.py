@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 import yfinance as yf
 import os
+import time
 import numpy as np
 
 import database_manager as db
@@ -12,6 +13,8 @@ import discord_utils as discord
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SIMS_CSV = os.path.join(SCRIPT_DIR, "sp500_strategy_simulations.csv")
+MAX_RETRIES = 2
+RETRY_DELAY = 3  # seconds
 
 def get_monitored_tickers():
     conn = db.get_db_connection()
@@ -34,26 +37,31 @@ def safe_val(v, fmt=None, default="N/A"):
     return v
 
 def _get_calendar_date(ticker_symbol):
-    try:
-        t = yf.Ticker(ticker_symbol)
-        cal = t.calendar
-        if not cal or not isinstance(cal, dict):
-            return None
-        ed_list = cal.get('Earnings Date')
-        if not ed_list or not isinstance(ed_list, list) or not ed_list:
-            return None
-        return ed_list[0]
-    except Exception:
-        return None
+    for attempt in range(1 + MAX_RETRIES):
+        try:
+            t = yf.Ticker(ticker_symbol)
+            cal = t.calendar
+            if not cal or not isinstance(cal, dict):
+                return None
+            ed_list = cal.get('Earnings Date')
+            if not ed_list or not isinstance(ed_list, list) or not ed_list:
+                return None
+            return ed_list[0]
+        except Exception:
+            if attempt < MAX_RETRIES:
+                time.sleep(RETRY_DELAY)
+    return None
 
 def _fetch_earnings_with_session(ticker_symbol):
-    try:
-        t = yf.Ticker(ticker_symbol)
-        df = t.earnings_dates
-        if df is not None and not df.empty:
-            return df
-    except Exception:
-        pass
+    for attempt in range(1 + MAX_RETRIES):
+        try:
+            t = yf.Ticker(ticker_symbol)
+            df = t.earnings_dates
+            if df is not None and not df.empty:
+                return df
+        except Exception:
+            if attempt < MAX_RETRIES:
+                time.sleep(RETRY_DELAY)
     return None
 
 def run_afternoon_execution():
@@ -151,7 +159,6 @@ def run_afternoon_execution():
 
         avg_move = meta['avg_abs_move']
         multiplier = meta['dynamic_multiplier']
-        required_move = avg_move * multiplier
 
         res_straddle = alpaca.get_atm_straddle_implied_move(t, price)
         if not res_straddle:
@@ -162,7 +169,7 @@ def run_afternoon_execution():
 
         implied_move, straddle_price, expiration_yymmdd, call_strike, put_strike = res_straddle
 
-        consensus, trend = alpaca.get_analyst_consensus(t)
+        consensus = alpaca.get_analyst_consensus(t)
         target_upside = None
         if consensus.get('target_mean') and price > 0:
             target_upside = (consensus['target_mean'] / price - 1) * 100
@@ -195,7 +202,7 @@ def run_afternoon_execution():
         adj_required_move = avg_move * adj_multiplier
 
         print(f"  Live Implied Move: {implied_move:.2f}%")
-        print(f"  Required Move (Historical {avg_move:.2f}% * Multiplier {multiplier}): {required_move:.2f}%")
+        print(f"  Required Move (Historical {avg_move:.2f}% * Multiplier {multiplier}): {avg_move * multiplier:.2f}%")
         print(f"  Consensus Alignment: {alignment:.2f} | Adj Multiplier: {adj_multiplier:.2f}")
         print(f"  Adjusted Required Move: {adj_required_move:.2f}%")
 
@@ -204,17 +211,6 @@ def run_afternoon_execution():
             print(f"Skipping {t}: {msg} (No Edge).")
             skipped.append((t, msg))
             continue
-
-        eps_est = eps_reported = eps_surprise = None
-        try:
-            df_earn = earnings_data.get(t)
-            if df_earn is not None and not df_earn.empty:
-                latest = df_earn.iloc[0]
-                eps_est = safe_val(latest.get('EPS Estimate'), default=None)
-                eps_reported = safe_val(latest.get('Reported EPS'), default=None)
-                eps_surprise = safe_val(latest.get('Surprise(%)'), default=None)
-        except Exception:
-            pass
 
         call_vol, call_oi, put_vol, put_oi = alpaca.get_option_volume_and_oi(
             t, expiration_yymmdd, call_strike, put_strike
@@ -229,11 +225,10 @@ def run_afternoon_execution():
         short_put, long_put = None, None
         short_call, long_call = None, None
 
-        if suggested_strat in ["Iron Condor", "Bull Put"]:
+        if suggested_strat == "Bull Put":
             short_put = round(price / ww) * ww - offset
             long_put = short_put - ww
-
-        if suggested_strat in ["Iron Condor", "Bear Call"]:
+        else:
             short_call = round(price / ww) * ww + offset
             long_call = short_call + ww
 
@@ -271,9 +266,6 @@ def run_afternoon_execution():
             "required_move": adj_required_move,
             "multiplier": adj_multiplier,
             "expiration_yymmdd": expiration_yymmdd,
-            "eps_estimate": eps_est,
-            "eps_reported": eps_reported,
-            "eps_surprise": eps_surprise,
             "call_volume": call_vol,
             "call_open_interest": call_oi,
             "put_volume": put_vol,

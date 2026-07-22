@@ -161,11 +161,11 @@ def get_analyst_calls(ticker, max_count=3):
         return []
 
 def get_analyst_consensus(ticker):
-    """Fetch consensus price target, recommendation, and rating trend via yfinance (free, no rate limit)."""
+    """Fetch consensus price target and recommendation via yfinance."""
     try:
         t = yf.Ticker(ticker)
         info = t.info
-        consensus = {
+        return {
             "target_mean": info.get('targetMeanPrice'),
             "target_high": info.get('targetHighPrice'),
             "target_low": info.get('targetLowPrice'),
@@ -173,26 +173,9 @@ def get_analyst_consensus(ticker):
             "recommendation_mean": info.get('recommendationMean'),
             "analyst_count": info.get('numberOfAnalystOpinions'),
         }
-        # Rating trend from recommendations_summary (0m, -1m, -2m, -3m)
-        trend = []
-        try:
-            rs = t.recommendations_summary
-            if rs is not None and not rs.empty:
-                for idx, row in rs.iterrows():
-                    trend.append({
-                        "period": idx,
-                        "strong_buy": int(row.get('strongBuy', 0)),
-                        "buy": int(row.get('buy', 0)),
-                        "hold": int(row.get('hold', 0)),
-                        "sell": int(row.get('sell', 0)),
-                        "strong_sell": int(row.get('strongSell', 0)),
-                    })
-        except Exception:
-            pass
-        return consensus, trend
     except Exception as e:
         print(f"Error fetching analyst consensus for {ticker}: {e}")
         return {"target_mean": None, "target_high": None, "target_low": None,
-                "recommendation": None, "recommendation_mean": None, "analyst_count": None}, []
+                "recommendation": None, "recommendation_mean": None, "analyst_count": None}
 
 

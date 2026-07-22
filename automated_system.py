@@ -111,11 +111,8 @@ def run_afternoon_execution():
                 elif idx_str == tomorrow_str and is_bmo:
                     session = "Pre-Market (BMO)"
                     break
-        if session is None:
-            if ed_str == today_str:
-                session = "After-Hours (AMC)"
-            elif ed_str == tomorrow_str:
-                session = "Pre-Market (BMO)"
+        if session is None and ed_str == today_str:
+            session = "After-Hours (AMC)"
         if session:
             if df_ed is not None and not df_ed.empty:
                 for idx in df_ed.index:
@@ -130,7 +127,7 @@ def run_afternoon_execution():
         if session:
             candidates.append((t, ed_str, session))
 
-    print(f"Found {len(candidates)} potential candidates reporting today AMC or tomorrow BMO.")
+    print(f"Found {len(candidates)} potential candidates reporting today AMC or confirmed tomorrow BMO.")
 
     try:
         df_sims = pd.read_csv(SIMS_CSV)

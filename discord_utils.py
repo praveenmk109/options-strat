@@ -44,7 +44,7 @@ def build_candidate_block(v):
     badge = "✅ Pass" if align >= -0.1 else "⚠️ Pass (Contrarian)"
 
     block = (
-        f"{v['ticker']} · {v['strategy']} · {session_short} {exp_date}\n"
+        f"**{v['ticker']}** · {v.get('company_name', v['ticker'])} · {v['strategy']} · {session_short} {exp_date}\n"
         f"\n"
         f"  • Entry: ${v['price']:.2f}  • Credit: ${v['est_credit']:.2f}  • Risk: ${v['margin']:.0f}\n"
     )
@@ -77,18 +77,10 @@ def build_candidate_block(v):
         vol_parts.append(f"Put Vol/OI: {fmt(pv)}/{fmt(poi)}")
         block += f"  • {'  • '.join(vol_parts)}\n"
 
-    ee, er = v.get('eps_estimate'), v.get('eps_reported')
-    if ee is not None and er is not None:
-        s = v.get('eps_surprise')
-        ss = f" ({s:+.1f}% surprise)" if s is not None else ""
-        block += f"  • Last EPS: Est ${ee:.2f} vs ${er:.2f}{ss}\n"
-
     analyst_calls = v.get('analyst_calls', [])
     if analyst_calls:
-        block += "\n" + "\n".join(
-            f"🔬 {c['date']}: {c['summary']}"
-            for c in analyst_calls
-        )
+        c = analyst_calls[0]
+        block += f"\n🔬 {c['date']}: {c['summary']}"
     return block
 
 
@@ -135,7 +127,7 @@ def send_weekly_preview(weekly_groups):
         parts.append("")
 
     body = "\n".join(parts) + (
-        "🔔 **Daily advisories** at 1 PM CT Mon-Fri for edge check.\n"
+        "🔔 **Daily advisories** at 9:30 AM CT Mon-Fri for edge check.\n"
         "*Strategy @ 5% OTM backtest, net for reference. ⚠️ = <70% win rate.*"
     )
 

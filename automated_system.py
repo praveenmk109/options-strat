@@ -249,6 +249,7 @@ def run_afternoon_execution():
 
         viable.append({
             "ticker": t,
+            "company_name": alpaca.get_company_name(t),
             "session": session,
             "earnings_date": earnings_date,
             "strategy": suggested_strat,

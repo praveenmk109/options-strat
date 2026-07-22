@@ -23,6 +23,12 @@ def get_current_stock_price(ticker):
         print(f"Error fetching stock price for {ticker}: {e}")
         return None
 
+def get_company_name(ticker):
+    try:
+        return yf.Ticker(ticker).info.get('shortName', ticker)
+    except Exception:
+        return ticker
+
 def get_atm_straddle_implied_move(ticker, current_price):
     tc = TradierClient()
     expirations = tc.get_option_expirations(ticker)

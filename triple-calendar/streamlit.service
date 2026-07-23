@@ -1,0 +1,12 @@
+[Unit]
+Description=Streamlit Triple Calendar Dashboard
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/triple-calendar
+ExecStart=/home/ubuntu/triple-calendar/venv/bin/streamlit run app.py --server.address 100.115.106.76 --server.port 8501
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

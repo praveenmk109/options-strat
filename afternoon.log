@@ -145,3 +145,227 @@ Found 0 tickers with calendar dates matching today/tomorrow.
 Fetching session details for 0 matching tickers...
 Found 0 potential candidates reporting today AMC or tomorrow BMO.
 Advisory sent: 0 viable, 0 skipped of 0 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 2 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 2 matching tickers...
+Found 1 potential candidates reporting today AMC or tomorrow BMO.
+
+Processing candidate: DAL
+  Live Implied Move: 7.06%
+  Required Move (Historical 5.40% * Multiplier 1.5): 8.10%
+  Consensus Alignment: 1.62 | Adj Multiplier: 1.20
+  Adjusted Required Move: 6.48%
+Advisory sent: 1 viable, 0 skipped of 1 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 1 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 1 matching tickers...
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+Advisory sent: 0 viable, 0 skipped of 0 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 4 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 4 matching tickers...
+Found 4 potential candidates reporting today AMC or tomorrow BMO.
+
+Processing candidate: BAC
+  Live Implied Move: 0.16%
+  Required Move (Historical 1.77% * Multiplier 1.5): 2.66%
+  Consensus Alignment: 1.50 | Adj Multiplier: 1.20
+  Adjusted Required Move: 2.12%
+Skipping BAC: Implied move 0.16% < Required move 2.12% (No Edge).
+
+Processing candidate: C
+  Live Implied Move: 4.11%
+  Required Move (Historical 1.72% * Multiplier 1.5): 2.58%
+  Consensus Alignment: 1.32 | Adj Multiplier: 1.20
+  Adjusted Required Move: 2.06%
+
+Processing candidate: JPM
+  Live Implied Move: 17.01%
+  Required Move (Historical 1.34% * Multiplier 1.5): 2.01%
+  Consensus Alignment: 0.83 | Adj Multiplier: 1.25
+  Adjusted Required Move: 1.68%
+
+Processing candidate: WFC
+  Live Implied Move: 48.18%
+  Required Move (Historical 3.53% * Multiplier 1.5): 5.29%
+  Consensus Alignment: 1.08 | Adj Multiplier: 1.20
+  Adjusted Required Move: 4.24%
+Advisory sent: 3 viable, 1 skipped of 4 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 7 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 7 matching tickers...
+Found 2 potential candidates reporting today AMC or tomorrow BMO.
+
+Processing candidate: CAG
+  Live Implied Move: 5.53%
+  Required Move (Historical 2.97% * Multiplier 1.5): 4.46%
+  Consensus Alignment: -0.29 | Adj Multiplier: 1.59
+  Adjusted Required Move: 4.72%
+
+Processing candidate: JNJ
+  Live Implied Move: 2.93%
+  Required Move (Historical 1.70% * Multiplier 1.5): 2.55%
+  Consensus Alignment: 1.00 | Adj Multiplier: 1.20
+  Adjusted Required Move: 2.04%
+Advisory sent: 2 viable, 0 skipped of 2 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 5 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 5 matching tickers...
+Found 2 potential candidates reporting today AMC or tomorrow BMO.
+
+Processing candidate: ABT
+  Live Implied Move: 4.47%
+  Required Move (Historical 3.42% * Multiplier 1.5): 5.13%
+  Consensus Alignment: -1.36 | Adj Multiplier: 1.80
+  Adjusted Required Move: 6.16%
+Skipping ABT: Implied move 4.47% < Required move 6.16% (No Edge).
+
+Processing candidate: USB
+  Live Implied Move: 2.65%
+  Required Move (Historical 1.83% * Multiplier 1.5): 2.75%
+  Consensus Alignment: -1.00 | Adj Multiplier: 1.80
+  Adjusted Required Move: 3.29%
+Skipping USB: Implied move 2.65% < Required move 3.29% (No Edge).
+Advisory sent: 0 viable, 2 skipped of 2 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 5 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 5 matching tickers...
+Found 5 potential candidates reporting today AMC or tomorrow BMO.
+
+Processing candidate: ABT
+  Live Implied Move: 1.78%
+  Required Move (Historical 3.42% * Multiplier 1.5): 5.13%
+  Consensus Alignment: -1.33 | Adj Multiplier: 1.80
+  Adjusted Required Move: 6.16%
+Skipping ABT: Implied move 1.78% < Required move 6.16% (No Edge).
+
+Processing candidate: NFLX
+  Live Implied Move: 7.23%
+  Required Move (Historical 7.67% * Multiplier 1.5): 11.50%
+  Consensus Alignment: -1.32 | Adj Multiplier: 1.80
+  Adjusted Required Move: 13.81%
+Skipping NFLX: Implied move 7.23% < Required move 13.81% (No Edge).
+
+Processing candidate: RF
+  Live Implied Move: 3.49%
+  Required Move (Historical 2.91% * Multiplier 1.5): 4.37%
+  Consensus Alignment: 0.18 | Adj Multiplier: 1.45
+  Adjusted Required Move: 4.21%
+Skipping RF: Implied move 3.49% < Required move 4.21% (No Edge).
+
+Processing candidate: TFC
+  Live Implied Move: 2.89%
+  Required Move (Historical 2.18% * Multiplier 1.5): 3.27%
+  Consensus Alignment: 0.38 | Adj Multiplier: 1.39
+  Adjusted Required Move: 3.02%
+Skipping TFC: Implied move 2.89% < Required move 3.02% (No Edge).
+
+Processing candidate: USB
+  Live Implied Move: 1.18%
+  Required Move (Historical 1.83% * Multiplier 1.5): 2.75%
+  Consensus Alignment: -1.00 | Adj Multiplier: 1.80
+  Adjusted Required Move: 3.29%
+Skipping USB: Implied move 1.18% < Required move 3.29% (No Edge).
+Advisory sent: 0 viable, 5 skipped of 5 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 2 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 2 matching tickers...
+Skipping RF: Already reported (EPS: 0.68)
+Skipping TFC: Already reported (EPS: 1.23)
+Found 0 potential candidates reporting today AMC or tomorrow BMO.
+Advisory sent: 0 viable, 0 skipped of 0 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 2 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 2 matching tickers...
+Found 2 potential candidates reporting today AMC or tomorrow BMO.
+
+Processing candidate: HAL
+  Live Implied Move: 4.34%
+  Required Move (Historical 3.31% * Multiplier 1.2): 3.97%
+  Consensus Alignment: -1.18 | Adj Multiplier: 1.32
+  Adjusted Required Move: 4.37%
+Skipping HAL: Implied move 4.34% < Required move 4.37% (No Edge).
+
+Processing candidate: SCHW
+  Live Implied Move: 3.83%
+  Required Move (Historical 3.50% * Multiplier 1.2): 4.20%
+  Consensus Alignment: 1.33 | Adj Multiplier: 1.08
+  Adjusted Required Move: 3.78%
+Advisory sent: 1 viable, 1 skipped of 2 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 10 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 10 matching tickers...
+Skipping HAL: Already reported (EPS: 0.55)
+Skipping SCHW: Already reported (EPS: 1.62)
+Found 8 potential candidates reporting today AMC or tomorrow BMO.
+
+Processing candidate: CSX
+  Live Implied Move: 3.67%
+  Required Move (Historical 3.06% * Multiplier 1.2): 3.67%
+  Consensus Alignment: 1.08 | Adj Multiplier: 1.08
+  Adjusted Required Move: 3.30%
+
+Processing candidate: GOOG
+  Live Implied Move: 5.08%
+  Required Move (Historical 6.16% * Multiplier 1.2): 7.39%
+  Consensus Alignment: 1.57 | Adj Multiplier: 1.08
+  Adjusted Required Move: 6.65%
+Skipping GOOG: Implied move 5.08% < Required move 6.65% (No Edge).
+
+Processing candidate: GOOGL
+  Live Implied Move: 4.22%
+  Required Move (Historical 6.34% * Multiplier 1.2): 7.61%
+  Consensus Alignment: 1.56 | Adj Multiplier: 1.08
+  Adjusted Required Move: 6.85%
+Skipping GOOGL: Implied move 4.22% < Required move 6.85% (No Edge).
+
+Processing candidate: IBM
+  Live Implied Move: 5.38%
+  Required Move (Historical 6.07% * Multiplier 1.2): 7.28%
+  Consensus Alignment: -0.88 | Adj Multiplier: 1.30
+  Adjusted Required Move: 7.92%
+Skipping IBM: Implied move 5.38% < Required move 7.92% (No Edge).
+
+Processing candidate: NOW
+  Live Implied Move: 10.39%
+  Required Move (Historical 6.90% * Multiplier 1.2): 8.28%
+  Consensus Alignment: 1.53 | Adj Multiplier: 1.08
+  Adjusted Required Move: 7.45%
+
+Processing candidate: T
+  Live Implied Move: 4.32%
+  Required Move (Historical 3.11% * Multiplier 1.2): 3.73%
+  Consensus Alignment: 0.92 | Adj Multiplier: 1.09
+  Adjusted Required Move: 3.39%
+
+Processing candidate: TSLA
+  Live Implied Move: 5.23%
+  Required Move (Historical 6.97% * Multiplier 1.2): 8.36%
+  Consensus Alignment: 0.62 | Adj Multiplier: 1.13
+  Adjusted Required Move: 7.85%
+Skipping TSLA: Implied move 5.23% < Required move 7.85% (No Edge).
+
+Processing candidate: TXN
+  Live Implied Move: 7.98%
+  Required Move (Historical 5.99% * Multiplier 1.2): 7.19%
+  Consensus Alignment: 0.78 | Adj Multiplier: 1.11
+  Adjusted Required Move: 6.63%
+Advisory sent: 4 viable, 4 skipped of 8 candidates.

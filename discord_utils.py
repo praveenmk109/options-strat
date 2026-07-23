@@ -137,15 +137,17 @@ def send_weekly_preview(weekly_groups):
         for s in stocks:
             wr = f"{s['win_rate']:.0f}%" if s['win_rate'] else "N/A"
             flag = " ⚠️" if s['win_rate'] and s['win_rate'] < 70 else ""
+            trade_date = s.get('trade_date_str', '')
+            trade_info = f" → Trade {trade_date}" if trade_date else ""
             parts.append(
                 f"  • {s['ticker']:6s} ${s['price']:.0f}  "
                 f"· ±{s['hist_abs']:.1f}% / {s['hist_net']:+.1f}%  "
-                f"· {s['strategy']} {wr}{flag}"
+                f"· {s['strategy']} {wr}{flag}{trade_info}"
             )
         parts.append("")
 
     body = "\n".join(parts) + (
-        "🔔 **Daily advisories** at 9:30 AM CT Mon-Fri for edge check.\n"
+        "🔔 **Daily advisories** at 1 PM CT Mon-Fri for edge check.\n"
         "*Strategy @ 5% OTM backtest, net for reference. ⚠️ = <70% win rate.*"
     )
 

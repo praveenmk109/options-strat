@@ -291,6 +291,11 @@ def run_weekly_preview():
     tickers = get_monitored_tickers()
     print(f"Scanning {len(tickers)} tickers for this week's earnings...")
 
+    # Get Nasdaq timing for the week
+    from tradier_client import get_nasdaq_earnings_week
+    nasdaq_data = get_nasdaq_earnings_week(today)
+    print(f"Nasdaq data: {len(nasdaq_data)} stocks with timing this week.")
+
     summ = {}
     try:
         df = pd.read_csv(os.path.join(SCRIPT_DIR, "sp500_earnings_summary.csv"))
@@ -338,16 +343,35 @@ def run_weekly_preview():
             hist_abs = float(summ[t]['Avg Abs Change (%)'])
             hist_net = float(summ[t]['Avg Net Change (%)'])
 
-            weekday_num = ed.weekday()
-            day_name = ed.strftime('%A')
-            date_str = ed.strftime('%b %d')
+            # Get timing from Nasdaq data
+            timing = nasdaq_data.get(t, {}).get("timing")
+            event_date = ed
+
+            # Calculate trading date based on BMO/AMC
+            if timing == "BMO":
+                # Trade day before
+                trading_date = event_date - timedelta(days=1)
+                if trading_date.weekday() == 5:  # Saturday
+                    trading_date = event_date - timedelta(days=2)
+                elif trading_date.weekday() == 6:  # Sunday
+                    trading_date = event_date - timedelta(days=3)
+            else:
+                # AMC or unknown: trade same day
+                trading_date = event_date
+
+            day_name = event_date.strftime('%A')
+            date_str = event_date.strftime('%b %d')
+            trade_date_str = trading_date.strftime('%b %d')
 
             week.append({
                 "ticker": t,
                 "price": price,
-                "date": ed,
+                "date": event_date,
+                "trading_date": trading_date,
+                "timing": timing,
                 "day_name": day_name,
                 "date_str": date_str,
+                "trade_date_str": trade_date_str,
                 "hist_abs": hist_abs,
                 "hist_net": hist_net,
                 "strategy": strategy,
@@ -365,7 +389,9 @@ def run_weekly_preview():
     current_key = None
     current_group = None
     for s in week:
-        key = f"{s['day_name']} {s['date_str']}"
+        # Group by event date + timing
+        timing_str = f" {s['timing']}" if s['timing'] else ""
+        key = f"{s['day_name']} {s['date_str']}{timing_str}"
         if key != current_key:
             if current_group is not None:
                 groups.append((current_key, current_group))

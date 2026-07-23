@@ -1,8 +1,75 @@
 import os
 import requests
+from datetime import datetime, timedelta
 
 BASE_PROD = "https://api.tradier.com/v1"
 REQUEST_TIMEOUT = 10  # seconds
+NASDAQ_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "Accept": "application/json",
+}
+
+
+def get_nasdaq_earnings(date_str):
+    """Get earnings calendar from Nasdaq for a specific date (YYYY-MM-DD).
+    Returns dict mapping ticker -> timing ('BMO', 'AMC', or None).
+    """
+    url = f"https://api.nasdaq.com/api/calendar/earnings?date={date_str}"
+    try:
+        r = requests.get(url, headers=NASDAQ_HEADERS, timeout=15)
+        r.raise_for_status()
+        data = r.json()
+        rows = data.get("data", {}).get("rows", [])
+        result = {}
+        for row in rows:
+            ticker = row.get("symbol")
+            time_raw = row.get("time", "")
+            if time_raw == "time-pre-market":
+                timing = "BMO"
+            elif time_raw == "time-after-hours":
+                timing = "AMC"
+            else:
+                timing = None
+            if ticker:
+                result[ticker] = timing
+        return result
+    except Exception:
+        return {}
+
+
+def get_nasdaq_earnings_week(start_date):
+    """Get earnings for Mon-Fri starting from start_date (datetime).
+    Returns dict mapping ticker -> {'timing': 'BMO'/'AMC'/None, 'date': date, 'trading_date': date}.
+    """
+    # Find Monday of the week
+    monday = start_date - timedelta(days=start_date.weekday())
+    all_earnings = {}
+
+    for i in range(5):  # Mon-Fri
+        day = monday + timedelta(days=i)
+        date_str = day.strftime("%Y-%m-%d")
+        day_earnings = get_nasdaq_earnings(date_str)
+
+        for ticker, timing in day_earnings.items():
+            if timing == "BMO":
+                # Trade day before
+                trading_date = day - timedelta(days=1)
+                # If day before is weekend, go back to Friday
+                if trading_date.weekday() == 5:  # Saturday
+                    trading_date = day - timedelta(days=2)
+                elif trading_date.weekday() == 6:  # Sunday
+                    trading_date = day - timedelta(days=3)
+            else:
+                # AMC or unknown: trade same day
+                trading_date = day
+
+            all_earnings[ticker] = {
+                "timing": timing,
+                "date": day,
+                "trading_date": trading_date,
+            }
+
+    return all_earnings
 
 
 class TradierError(Exception):

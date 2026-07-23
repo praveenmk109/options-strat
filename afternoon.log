@@ -369,3 +369,55 @@ Processing candidate: TXN
   Consensus Alignment: 0.78 | Adj Multiplier: 1.11
   Adjusted Required Move: 6.63%
 Advisory sent: 4 viable, 4 skipped of 8 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 11 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 11 matching tickers...
+Skipping CMCSA: Already reported (EPS: 1.04)
+Skipping DOW: Already reported (EPS: 1.44)
+Skipping FCX: Already reported (EPS: 0.74)
+Skipping HBAN: Already reported (EPS: 0.39)
+Skipping PCG: Already reported (EPS: 0.4)
+Found 6 potential candidates reporting today AMC or confirmed tomorrow BMO.
+
+Processing candidate: INTC
+  Live Implied Move: 10.00%
+  Required Move (Historical 10.30% * Multiplier 1.2): 12.36%
+  Consensus Alignment: -0.40 | Adj Multiplier: 1.25
+  Adjusted Required Move: 12.85%
+Skipping INTC: Implied move 10.00% < Required move 12.85% (No Edge).
+
+Processing candidate: NEE
+  Live Implied Move: 2.23%
+  Required Move (Historical 1.69% * Multiplier 1.2): 2.03%
+  Consensus Alignment: 1.05 | Adj Multiplier: 1.08
+  Adjusted Required Move: 1.83%
+
+Processing candidate: NEM
+  Live Implied Move: 4.08%
+  Required Move (Historical 3.30% * Multiplier 1.2): 3.96%
+  Consensus Alignment: -1.45 | Adj Multiplier: 1.32
+  Adjusted Required Move: 4.36%
+Skipping NEM: Implied move 4.08% < Required move 4.36% (No Edge).
+
+Processing candidate: SLB
+  Live Implied Move: 2.64%
+  Required Move (Historical 1.51% * Multiplier 1.2): 1.81%
+  Consensus Alignment: 1.40 | Adj Multiplier: 1.08
+  Adjusted Required Move: 1.63%
+
+Processing candidate: TSCO
+  Live Implied Move: 2.35%
+  Required Move (Historical 3.53% * Multiplier 1.2): 4.24%
+  Consensus Alignment: -0.90 | Adj Multiplier: 1.31
+  Adjusted Required Move: 4.62%
+Skipping TSCO: Implied move 2.35% < Required move 4.62% (No Edge).
+
+Processing candidate: VZ
+  Live Implied Move: 3.26%
+  Required Move (Historical 3.40% * Multiplier 1.2): 4.08%
+  Consensus Alignment: 0.73 | Adj Multiplier: 1.11
+  Adjusted Required Move: 3.78%
+Skipping VZ: Implied move 3.26% < Required move 3.78% (No Edge).
+Advisory sent: 2 viable, 4 skipped of 6 candidates.

@@ -230,18 +230,30 @@ def run_afternoon_execution():
             long_call = short_call + ww
 
         est_credit = None
+        short_bid, short_ask = None, None
+        long_bid, long_ask = None, None
         if suggested_strat == "Bear Call" and short_call:
             short_price = alpaca.get_option_price(t, expiration_yymmdd, short_call, "call")
             long_price = alpaca.get_option_price(t, expiration_yymmdd, long_call, "call")
+            short_bid, short_ask = alpaca.get_option_bid_ask(t, expiration_yymmdd, short_call, "call")
+            long_bid, long_ask = alpaca.get_option_bid_ask(t, expiration_yymmdd, long_call, "call")
             if short_price is not None and long_price is not None:
                 est_credit = short_price - long_price
         elif short_put:
             short_price = alpaca.get_option_price(t, expiration_yymmdd, short_put, "put")
             long_price = alpaca.get_option_price(t, expiration_yymmdd, long_put, "put")
+            short_bid, short_ask = alpaca.get_option_bid_ask(t, expiration_yymmdd, short_put, "put")
+            long_bid, long_ask = alpaca.get_option_bid_ask(t, expiration_yymmdd, long_put, "put")
             if short_price is not None and long_price is not None:
                 est_credit = short_price - long_price
         if est_credit is None or est_credit <= 0:
             est_credit = 0.20 * ww
+
+        # Calculate net credit at bid-ask (what you'd actually get filled at)
+        net_credit_bid_ask = None
+        if short_bid is not None and long_ask is not None:
+            net_credit_bid_ask = short_bid - long_ask
+
         margin = ww * 100.0
 
         viable.append({
@@ -273,6 +285,11 @@ def run_afternoon_execution():
             "alignment": alignment,
             "target_upside": target_upside,
             "strategy_win_rate": strategy_win_rate,
+            "short_bid": short_bid,
+            "short_ask": short_ask,
+            "long_bid": long_bid,
+            "long_ask": long_ask,
+            "net_credit_bid_ask": net_credit_bid_ask,
         })
 
     result = discord.send_afternoon_advisory(today_str, candidates, viable, skipped)

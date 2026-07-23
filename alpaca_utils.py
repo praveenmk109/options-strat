@@ -134,6 +134,25 @@ def get_option_price(ticker, expiration_yymmdd, strike, option_type):
         print(f"Error fetching option price for {ticker}: {e}")
         return None
 
+
+def get_option_bid_ask(ticker, expiration_yymmdd, strike, option_type):
+    """Returns (bid, ask) for a specific option, or (None, None) on error."""
+    try:
+        exp_date = datetime.strptime(expiration_yymmdd, "%y%m%d").strftime("%Y-%m-%d")
+        tc = TradierClient()
+        chain = tc.get_option_chain(ticker, exp_date, greeks=False)
+        if not chain:
+            return None, None
+        opts = [o for o in chain if o.get('option_type') == option_type.lower()]
+        if not opts:
+            return None, None
+        closest = min(opts, key=lambda o: abs(float(o['strike']) - strike))
+        bid = float(closest.get('bid') or 0)
+        ask = float(closest.get('ask') or 0)
+        return bid if bid > 0 else None, ask if ask > 0 else None
+    except Exception:
+        return None, None
+
 def get_analyst_calls(ticker, max_count=3):
     """Get most recent analyst upgrades/downgrades/price target changes."""
     try:

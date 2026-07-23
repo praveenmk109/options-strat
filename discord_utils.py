@@ -59,6 +59,22 @@ def build_candidate_block(v):
     block += f"  • Expected move: ±{v['implied_move']:.2f}%  • Historical: ±{v['hist_move']:.2f}%\n"
     block += f"  • {badge}  • Sim win rate: {wr}\n"
 
+    # Bid-ask spread info
+    short_bid = v.get('short_bid')
+    short_ask = v.get('short_ask')
+    long_bid = v.get('long_bid')
+    long_ask = v.get('long_ask')
+    net_credit_ba = v.get('net_credit_bid_ask')
+    if short_bid is not None and short_ask is not None:
+        spread = short_ask - short_bid
+        block += f"  • Short leg: bid ${short_bid:.2f} / ask ${short_ask:.2f} (spread ${spread:.2f})\n"
+    if long_bid is not None and long_ask is not None:
+        spread = long_ask - long_bid
+        block += f"  • Long leg: bid ${long_bid:.2f} / ask ${long_ask:.2f} (spread ${spread:.2f})\n"
+    if net_credit_ba is not None:
+        color = "✅" if net_credit_ba > 0 else "❌"
+        block += f"  • {color} Fill at bid-ask: ${net_credit_ba:.2f} credit\n"
+
     c = v.get('consensus', {})
     upside = v.get('target_upside')
     if c.get('recommendation'):

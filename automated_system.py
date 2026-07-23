@@ -96,11 +96,24 @@ def run_afternoon_execution():
         if df_ed is not None:
             earnings_data[t] = df_ed
 
+    # Get Nasdaq timing for today and tomorrow
+    from tradier_client import get_nasdaq_earnings
+    nasdaq_today = get_nasdaq_earnings(today_str)
+    nasdaq_tomorrow = get_nasdaq_earnings(tomorrow_str)
+    print(f"Nasdaq timing: {len(nasdaq_today)} stocks today, {len(nasdaq_tomorrow)} stocks tomorrow.")
+
     candidates = []
     for t, ed_str in matching:
         session = None
         df_ed = earnings_data.get(t)
-        if df_ed is not None and not df_ed.empty:
+
+        # Check Nasdaq timing first (more reliable)
+        if ed_str == today_str and nasdaq_today.get(t) == "AMC":
+            session = "After-Hours (AMC)"
+        elif ed_str == tomorrow_str and nasdaq_tomorrow.get(t) == "BMO":
+            session = "Pre-Market (BMO)"
+        # Fallback to yfinance timing if Nasdaq doesn't have it
+        elif df_ed is not None and not df_ed.empty:
             for idx in df_ed.index:
                 idx_str = idx.strftime('%Y-%m-%d')
                 hour = idx.hour
@@ -111,8 +124,7 @@ def run_afternoon_execution():
                 elif idx_str == tomorrow_str and is_bmo:
                     session = "Pre-Market (BMO)"
                     break
-        if session is None and ed_str == today_str:
-            session = "After-Hours (AMC)"
+
         if session:
             if df_ed is not None and not df_ed.empty:
                 for idx in df_ed.index:

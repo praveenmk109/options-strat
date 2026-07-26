@@ -42,6 +42,15 @@ def build_candidate_block(v):
 
     align = v.get('alignment', 0)
     badge = "✅ Pass" if align >= -0.1 else "⚠️ Pass (Contrarian)"
+    
+    # Sentiment badge
+    sentiment = v.get('sentiment_score', 0)
+    if sentiment <= -2:
+        sentiment_badge = "🔴 Bearish"
+    elif sentiment <= -1:
+        sentiment_badge = "🟡 Mild Bear"
+    else:
+        sentiment_badge = "🟢 Neutral"
 
     block = (
         f"**{v['ticker']}** · {v.get('company_name', v['ticker'])} · {v['strategy']} · {session_short} {exp_date}\n"
@@ -57,7 +66,7 @@ def build_candidate_block(v):
         block += f"  • Sell ${v['short_call']} call / Buy ${v['long_call']} call\n"
 
     block += f"  • Expected move: ±{v['implied_move']:.2f}%  • Historical: ±{v['hist_move']:.2f}%\n"
-    block += f"  • {badge}  • Sim win rate: {wr}\n"
+    block += f"  • {badge}  • {sentiment_badge}  • Sim win rate: {wr}\n"
 
     # Bid-ask spread info
     short_bid = v.get('short_bid')

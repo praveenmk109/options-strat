@@ -421,3 +421,11 @@ Processing candidate: VZ
   Adjusted Required Move: 3.78%
 Skipping VZ: Implied move 3.26% < Required move 3.78% (No Edge).
 Advisory sent: 2 viable, 4 skipped of 6 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 127 tickers (fast calendar pass)...
+Found 3 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 3 matching tickers...
+Nasdaq timing: 36 stocks today, 71 stocks tomorrow.
+Found 0 potential candidates reporting today AMC or confirmed tomorrow BMO.
+Advisory sent: 0 viable, 0 skipped of 0 candidates.

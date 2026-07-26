@@ -185,18 +185,31 @@ def run_afternoon_execution():
 
         suggested_strat = "Bull Put"
         strategy_win_rate = 0
+        sentiment_score = 0
+        sentiment_details = {}
+        
+        # Get sentiment score first (used for strategy override)
+        sentiment_score, sentiment_details = alpaca.get_sentiment_score(t)
+        print(f"  Sentiment Score: {sentiment_score} | Details: {sentiment_details}")
+        
         if df_sims is not None:
             try:
                 row_sim = df_sims[df_sims['Ticker'] == t].iloc[0]
                 bps = row_sim.get('bps_win_rate_5', 0)
                 bcs = row_sim.get('bcs_win_rate_5', 0)
 
+                # Default strategy based on win rates
                 if bps >= bcs:
                     suggested_strat = "Bull Put"
                     strategy_win_rate = bps
                 else:
                     suggested_strat = "Bear Call"
                     strategy_win_rate = bcs
+                    
+                # Override strategy if sentiment is strongly bearish
+                if sentiment_score <= -2:
+                    suggested_strat = "Bear Call"
+                    print(f"  Strategy Override: Bear Call (sentiment score {sentiment_score} <= -2)")
             except Exception:
                 pass
 
@@ -302,6 +315,8 @@ def run_afternoon_execution():
             "long_bid": long_bid,
             "long_ask": long_ask,
             "net_credit_bid_ask": net_credit_bid_ask,
+            "sentiment_score": sentiment_score,
+            "sentiment_details": sentiment_details,
         })
 
     result = discord.send_afternoon_advisory(today_str, candidates, viable, skipped)
@@ -372,9 +387,29 @@ def run_weekly_preview():
             hist_abs = float(summ[t]['Avg Abs Change (%)'])
             hist_net = float(summ[t]['Avg Net Change (%)'])
 
-            # Get timing from Nasdaq data
+            # Get timing from Nasdaq data first
             timing = nasdaq_data.get(t, {}).get("timing")
+            
+            # Fallback: infer timing from yfinance earnings date hour
+            if timing is None:
+                try:
+                    ed_df = _fetch_earnings_with_session(t)
+                    if ed_df is not None and not ed_df.empty:
+                        for idx in ed_df.index:
+                            idx_date = idx.date()
+                            if idx_date == ed:
+                                hour = idx.hour
+                                timing = "BMO" if hour < 12 else "AMC"
+                                break
+                except Exception:
+                    pass
+            
             event_date = ed
+
+            # Skip Sunday earnings (data error)
+            if event_date.weekday() == 6:  # Sunday
+                print(f"Skipping {t}: Sunday earnings date {event_date} (data error)")
+                continue
 
             # Calculate trading date based on BMO/AMC
             if timing == "BMO":

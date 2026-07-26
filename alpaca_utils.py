@@ -203,4 +203,66 @@ def get_analyst_consensus(ticker):
         return {"target_mean": None, "target_high": None, "target_low": None,
                 "recommendation": None, "recommendation_mean": None, "analyst_count": None}
 
+def get_sentiment_score(ticker):
+    """
+    Calculate sentiment score for a stock.
+    Returns (score, details_dict).
+    
+    Score interpretation:
+        <= -2: Strong bearish (force Bear Call)
+        -1: Mild bearish (use default)
+        >= 0: Neutral/bullish (use default, favor Bull Put)
+    """
+    score = 0
+    details = {}
+    
+    try:
+        t = yf.Ticker(ticker)
+        info = t.info
+        
+        # 1. Price vs 200-day MA
+        price = info.get('currentPrice') or info.get('regularMarketPrice')
+        sma_200 = info.get('twoHundredDayAverage')
+        if price and sma_200 and sma_200 > 0:
+            below_200dma = price < sma_200
+            details['price'] = price
+            details['sma_200'] = sma_200
+            details['below_200dma'] = below_200dma
+            if below_200dma:
+                score -= 1
+        else:
+            details['below_200dma'] = None
+        
+        # 2. Price vs 50-day MA
+        sma_50 = info.get('fiftyDayAverage')
+        if price and sma_50 and sma_50 > 0:
+            below_50dma = price < sma_50
+            details['sma_50'] = sma_50
+            details['below_50dma'] = below_50dma
+            if below_50dma:
+                score -= 1
+        else:
+            details['below_50dma'] = None
+        
+        # 3. 52-week performance
+        fifty_two_week_high = info.get('fiftyTwoWeekHigh')
+        if price and fifty_two_week_high and fifty_two_week_high > 0:
+            pct_from_high = (price - fifty_two_week_high) / fifty_two_week_high * 100
+            details['pct_from_52w_high'] = pct_from_high
+            if pct_from_high < -20:  # More than 20% below 52-week high
+                score -= 1
+        
+        # 4. Short interest (if available)
+        short_ratio = info.get('shortRatio')
+        if short_ratio and short_ratio > 5:  # High short interest
+            score -= 1
+            details['short_ratio'] = short_ratio
+        
+        details['score'] = score
+        return score, details
+        
+    except Exception as e:
+        print(f"Error calculating sentiment for {ticker}: {e}")
+        return 0, {"error": str(e)}
+
 

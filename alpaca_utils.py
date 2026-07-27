@@ -153,6 +153,97 @@ def get_option_bid_ask(ticker, expiration_yymmdd, strike, option_type):
     except Exception:
         return None, None
 
+def evaluate_spread_quality(ticker, expiration_yymmdd, short_strike, long_strike, option_type, est_credit):
+    """
+    Evaluate the bid-ask spread quality for a vertical spread.
+    
+    Returns dict with:
+        short_bid, short_ask, long_bid, long_ask: raw quotes
+        net_credit_bid_ask: worst-case credit (short_bid - long_ask)
+        est_credit: mid-price credit estimate
+        slippage_ratio: (est_credit - net_credit_bid_ask) / est_credit
+        short_spread_pct: (short_ask - short_bid) / short_mid * 100
+        long_spread_pct: (long_ask - long_bid) / long_mid * 100
+        is_tradeable: bool, passes all filters
+        rejection_reason: str or None
+    """
+    result = {
+        'short_bid': None, 'short_ask': None,
+        'long_bid': None, 'long_ask': None,
+        'net_credit_bid_ask': None,
+        'est_credit': est_credit,
+        'slippage_ratio': None,
+        'short_spread_pct': None,
+        'long_spread_pct': None,
+        'is_tradeable': False,
+        'rejection_reason': None,
+    }
+    
+    # Fetch quotes for both legs
+    short_bid, short_ask = get_option_bid_ask(ticker, expiration_yymmdd, short_strike, option_type)
+    long_bid, long_ask = get_option_bid_ask(ticker, expiration_yymmdd, long_strike, option_type)
+    
+    result['short_bid'] = short_bid
+    result['short_ask'] = short_ask
+    result['long_bid'] = long_bid
+    result['long_ask'] = long_ask
+    
+    # Check that both legs have valid quotes
+    if short_bid is None or short_ask is None:
+        result['rejection_reason'] = f"Missing quotes for short {option_type}"
+        return result
+    if long_bid is None or long_ask is None:
+        result['rejection_reason'] = f"Missing quotes for long {option_type}"
+        return result
+    if short_bid <= 0 or short_ask <= 0:
+        result['rejection_reason'] = f"Invalid quotes for short {option_type} (bid={short_bid}, ask={short_ask})"
+        return result
+    if long_bid <= 0 or long_ask <= 0:
+        result['rejection_reason'] = f"Invalid quotes for long {option_type} (bid={long_bid}, ask={long_ask})"
+        return result
+    
+    # Calculate spread percentages
+    short_mid = (short_bid + short_ask) / 2
+    long_mid = (long_bid + long_ask) / 2
+    
+    short_spread_pct = (short_ask - short_bid) / short_mid if short_mid > 0 else 999
+    long_spread_pct = (long_ask - long_bid) / long_mid if long_mid > 0 else 999
+    
+    result['short_spread_pct'] = short_spread_pct
+    result['long_spread_pct'] = long_spread_pct
+    
+    # Check per-leg spread threshold (25% of mid price)
+    MAX_LEG_SPREAD_PCT = 0.25
+    if short_spread_pct > MAX_LEG_SPREAD_PCT:
+        result['rejection_reason'] = f"Short leg spread too wide ({short_spread_pct:.0%} > {MAX_LEG_SPREAD_PCT:.0%})"
+        return result
+    if long_spread_pct > MAX_LEG_SPREAD_PCT:
+        result['rejection_reason'] = f"Long leg spread too wide ({long_spread_pct:.0%} > {MAX_LEG_SPREAD_PCT:.0%})"
+        return result
+    
+    # Calculate net credit at bid-ask (worst-case fill)
+    net_credit_bid_ask = short_bid - long_ask
+    result['net_credit_bid_ask'] = net_credit_bid_ask
+    
+    # Must receive a credit
+    if net_credit_bid_ask <= 0:
+        result['rejection_reason'] = f"Negative credit at bid-ask (${net_credit_bid_ask:.2f})"
+        return result
+    
+    # Calculate slippage ratio
+    if est_credit and est_credit > 0:
+        slippage_ratio = (est_credit - net_credit_bid_ask) / est_credit
+        result['slippage_ratio'] = slippage_ratio
+        
+        # Check credit retention (must retain at least 25% of theoretical credit)
+        MIN_CREDIT_RETENTION = 0.25
+        if slippage_ratio > (1 - MIN_CREDIT_RETENTION):
+            result['rejection_reason'] = f"Too much slippage ({slippage_ratio:.0%} > {1-MIN_CREDIT_RETENTION:.0%})"
+            return result
+    
+    result['is_tradeable'] = True
+    return result
+
 def get_analyst_calls(ticker, max_count=3):
     """Get most recent analyst upgrades/downgrades/price target changes."""
     try:

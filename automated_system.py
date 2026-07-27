@@ -255,29 +255,48 @@ def run_afternoon_execution():
             long_call = short_call + ww
 
         est_credit = None
-        short_bid, short_ask = None, None
-        long_bid, long_ask = None, None
+        short_price = None
+        long_price = None
+        
+        # Get mid prices first to estimate credit
         if suggested_strat == "Bear Call" and short_call:
             short_price = alpaca.get_option_price(t, expiration_yymmdd, short_call, "call")
             long_price = alpaca.get_option_price(t, expiration_yymmdd, long_call, "call")
-            short_bid, short_ask = alpaca.get_option_bid_ask(t, expiration_yymmdd, short_call, "call")
-            long_bid, long_ask = alpaca.get_option_bid_ask(t, expiration_yymmdd, long_call, "call")
-            if short_price is not None and long_price is not None:
-                est_credit = short_price - long_price
         elif short_put:
             short_price = alpaca.get_option_price(t, expiration_yymmdd, short_put, "put")
             long_price = alpaca.get_option_price(t, expiration_yymmdd, long_put, "put")
-            short_bid, short_ask = alpaca.get_option_bid_ask(t, expiration_yymmdd, short_put, "put")
-            long_bid, long_ask = alpaca.get_option_bid_ask(t, expiration_yymmdd, long_put, "put")
-            if short_price is not None and long_price is not None:
-                est_credit = short_price - long_price
+        
+        if short_price is not None and long_price is not None:
+            est_credit = short_price - long_price
         if est_credit is None or est_credit <= 0:
             est_credit = 0.20 * ww
 
-        # Calculate net credit at bid-ask (what you'd actually get filled at)
-        net_credit_bid_ask = None
-        if short_bid is not None and long_ask is not None:
-            net_credit_bid_ask = short_bid - long_ask
+        # Evaluate spread quality (fetches bid-ask and checks liquidity)
+        if suggested_strat == "Bear Call" and short_call:
+            spread_result = alpaca.evaluate_spread_quality(
+                t, expiration_yymmdd, short_call, long_call, "call", est_credit
+            )
+        elif short_put:
+            spread_result = alpaca.evaluate_spread_quality(
+                t, expiration_yymmdd, short_put, long_put, "put", est_credit
+            )
+        else:
+            spread_result = {'is_tradeable': False, 'rejection_reason': 'No strategy determined'}
+
+        # Skip if spread quality is poor
+        if not spread_result.get('is_tradeable'):
+            msg = f"Poor spread: {spread_result.get('rejection_reason', 'Unknown')}"
+            print(f"Skipping {t}: {msg}.")
+            skipped.append((t, msg))
+            continue
+
+        # Use spread_result values
+        short_bid = spread_result['short_bid']
+        short_ask = spread_result['short_ask']
+        long_bid = spread_result['long_bid']
+        long_ask = spread_result['long_ask']
+        net_credit_bid_ask = spread_result['net_credit_bid_ask']
+        slippage_ratio = spread_result.get('slippage_ratio')
 
         margin = ww * 100.0
 
@@ -315,6 +334,7 @@ def run_afternoon_execution():
             "long_bid": long_bid,
             "long_ask": long_ask,
             "net_credit_bid_ask": net_credit_bid_ask,
+            "slippage_ratio": slippage_ratio,
             "sentiment_score": sentiment_score,
             "sentiment_details": sentiment_details,
         })

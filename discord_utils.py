@@ -83,6 +83,17 @@ def build_candidate_block(v):
     if net_credit_ba is not None:
         color = "✅" if net_credit_ba > 0 else "❌"
         block += f"  • {color} Fill at bid-ask: ${net_credit_ba:.2f} credit\n"
+    
+    # Slippage ratio badge
+    slippage = v.get('slippage_ratio')
+    if slippage is not None:
+        if slippage <= 0.15:
+            spread_badge = "🟢 Tight Spread"
+        elif slippage <= 0.30:
+            spread_badge = "🟡 Moderate Spread"
+        else:
+            spread_badge = "🔴 Wide Spread"
+        block += f"  • {spread_badge} ({slippage:.0%} slippage)\n"
 
     c = v.get('consensus', {})
     upside = v.get('target_upside')

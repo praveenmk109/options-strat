@@ -27,7 +27,7 @@ def get_sp500_tickers():
     tickers = [t.replace('.', '-') for t in tickers]
     return tickers
 
-def filter_by_liquidity(tickers, min_volume=8000000):
+def filter_by_liquidity(tickers, min_volume=1000000):
     print(f"Downloading 1-month volume data in bulk for {len(tickers)} tickers...")
     try:
         # Fetch 1 month of history to calculate average volume
@@ -76,8 +76,8 @@ def main():
     # 1. Scrape S&P 500 tickers
     all_tickers = get_sp500_tickers()
     
-    # 2. Filter by Liquidity to get tradeable options candidates (ADV >= 8M)
-    tickers = filter_by_liquidity(all_tickers, min_volume=8000000)
+    # 2. Filter by Liquidity to get tradeable options candidates (ADV >= 1M)
+    tickers = filter_by_liquidity(all_tickers, min_volume=1000000)
     
     if not tickers:
         print("No tickers passed the liquidity filter. Exiting.")

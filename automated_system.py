@@ -207,9 +207,15 @@ def run_afternoon_execution():
                     strategy_win_rate = bcs
                     
                 # Override strategy if sentiment is strongly bearish
+                # BUT only if analyst consensus is not strongly bullish
                 if sentiment_score <= -2:
-                    suggested_strat = "Bear Call"
-                    print(f"  Strategy Override: Bear Call (sentiment score {sentiment_score} <= -2)")
+                    rec_mean = consensus.get('recommendation_mean')
+                    # Don't override if analysts strongly recommend buy (rec_mean < 2.0)
+                    if rec_mean is not None and rec_mean < 2.0:
+                        print(f"  No override: sentiment bearish ({sentiment_score}) but analysts bullish ({rec_mean:.2f})")
+                    else:
+                        suggested_strat = "Bear Call"
+                        print(f"  Strategy Override: Bear Call (sentiment score {sentiment_score} <= -2)")
             except Exception:
                 pass
 

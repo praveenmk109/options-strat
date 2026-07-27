@@ -212,8 +212,8 @@ def evaluate_spread_quality(ticker, expiration_yymmdd, short_strike, long_strike
     result['short_spread_pct'] = short_spread_pct
     result['long_spread_pct'] = long_spread_pct
     
-    # Check per-leg spread threshold (25% of mid price)
-    MAX_LEG_SPREAD_PCT = 0.25
+    # Check per-leg spread threshold (15% of mid price)
+    MAX_LEG_SPREAD_PCT = 0.15
     if short_spread_pct > MAX_LEG_SPREAD_PCT:
         result['rejection_reason'] = f"Short leg spread too wide ({short_spread_pct:.0%} > {MAX_LEG_SPREAD_PCT:.0%})"
         return result
@@ -235,10 +235,19 @@ def evaluate_spread_quality(ticker, expiration_yymmdd, short_strike, long_strike
         slippage_ratio = (est_credit - net_credit_bid_ask) / est_credit
         result['slippage_ratio'] = slippage_ratio
         
-        # Check credit retention (must retain at least 25% of theoretical credit)
-        MIN_CREDIT_RETENTION = 0.25
+        # Check credit retention (must retain at least 40% of theoretical credit)
+        MIN_CREDIT_RETENTION = 0.40
         if slippage_ratio > (1 - MIN_CREDIT_RETENTION):
             result['rejection_reason'] = f"Too much slippage ({slippage_ratio:.0%} > {1-MIN_CREDIT_RETENTION:.0%})"
+            return result
+    
+    # Check minimum return on risk (credit / wing width)
+    wing_width = abs(short_strike - long_strike)
+    if wing_width > 0:
+        return_on_risk = net_credit_bid_ask / wing_width
+        MIN_RETURN_ON_RISK = 0.05  # 5% minimum
+        if return_on_risk < MIN_RETURN_ON_RISK:
+            result['rejection_reason'] = f"Low return on risk ({return_on_risk:.0%} < {MIN_RETURN_ON_RISK:.0%})"
             return result
     
     result['is_tradeable'] = True

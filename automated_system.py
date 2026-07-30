@@ -185,37 +185,19 @@ def run_afternoon_execution():
 
         suggested_strat = "Bull Put"
         strategy_win_rate = 0
-        sentiment_score = 0
-        sentiment_details = {}
-        
-        # Get sentiment score first (used for strategy override)
-        sentiment_score, sentiment_details = alpaca.get_sentiment_score(t)
-        print(f"  Sentiment Score: {sentiment_score} | Details: {sentiment_details}")
-        
+
         if df_sims is not None:
             try:
                 row_sim = df_sims[df_sims['Ticker'] == t].iloc[0]
                 bps = row_sim.get('bps_win_rate_5', 0)
                 bcs = row_sim.get('bcs_win_rate_5', 0)
 
-                # Default strategy based on win rates
                 if bps >= bcs:
                     suggested_strat = "Bull Put"
                     strategy_win_rate = bps
                 else:
                     suggested_strat = "Bear Call"
                     strategy_win_rate = bcs
-                    
-                # Override strategy if sentiment is strongly bearish
-                # BUT only if analyst consensus is not strongly bullish
-                if sentiment_score <= -2:
-                    rec_mean = consensus.get('recommendation_mean')
-                    # Don't override if analysts strongly recommend buy (rec_mean < 2.0)
-                    if rec_mean is not None and rec_mean < 2.0:
-                        print(f"  No override: sentiment bearish ({sentiment_score}) but analysts bullish ({rec_mean:.2f})")
-                    else:
-                        suggested_strat = "Bear Call"
-                        print(f"  Strategy Override: Bear Call (sentiment score {sentiment_score} <= -2)")
             except Exception:
                 pass
 
@@ -341,8 +323,6 @@ def run_afternoon_execution():
             "long_ask": long_ask,
             "net_credit_bid_ask": net_credit_bid_ask,
             "slippage_ratio": slippage_ratio,
-            "sentiment_score": sentiment_score,
-            "sentiment_details": sentiment_details,
         })
 
     result = discord.send_afternoon_advisory(today_str, candidates, viable, skipped)

@@ -16,7 +16,7 @@ def init_db():
     CREATE TABLE IF NOT EXISTS stocks_metadata (
         ticker TEXT PRIMARY KEY,
         avg_abs_move REAL NOT NULL,
-        dynamic_multiplier REAL NOT NULL DEFAULT 1.2,
+        dynamic_multiplier REAL NOT NULL DEFAULT 1.1,
         consecutive_wins INTEGER NOT NULL DEFAULT 0
     )
     """)

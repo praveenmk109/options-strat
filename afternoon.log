@@ -680,3 +680,735 @@ Processing candidate: XYL
   Adjusted Required Move: 4.46%
 Skipping XYL: Poor spread: Short leg spread too wide (86% > 25%).
 Advisory sent: 5 viable, 25 skipped of 30 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 435 tickers (fast calendar pass)...
+Found 88 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 88 matching tickers...
+Nasdaq timing: 145 stocks today, 289 stocks tomorrow.
+Found 43 potential candidates reporting today AMC or confirmed tomorrow BMO.
+
+Processing candidate: ACGL
+  Sentiment Score: 0 | Details: {'price': 106.43, 'sma_200': 94.55635, 'below_200dma': False, 'sma_50': 95.8398, 'below_50dma': False, 'pct_from_52w_high': -0.6116636316944362, 'score': 0}
+  Live Implied Move: 4.69%
+  Required Move (Historical 2.22% * Multiplier 1.2): 2.66%
+  Consensus Alignment: 0.75 | Adj Multiplier: 1.11
+  Adjusted Required Move: 2.46%
+Skipping ACGL: Poor spread: Short leg spread too wide (36% > 15%).
+
+Processing candidate: ADP
+  Sentiment Score: -1 | Details: {'price': 266.65, 'sma_200': 236.2848, 'below_200dma': False, 'sma_50': 231.4476, 'below_50dma': False, 'pct_from_52w_high': -15.611747578960705, 'short_ratio': 5.05, 'score': -1}
+  Live Implied Move: 4.26%
+  Required Move (Historical 2.59% * Multiplier 1.2): 3.11%
+  Consensus Alignment: 0.33 | Adj Multiplier: 1.16
+  Adjusted Required Move: 3.00%
+Skipping ADP: Poor spread: Short leg spread too wide (29% > 15%).
+
+Processing candidate: AON
+  Sentiment Score: 0 | Details: {'price': 379.295, 'sma_200': 336.3323, 'below_200dma': False, 'sma_50': 336.5476, 'below_50dma': False, 'pct_from_52w_high': -0.7964115708531567, 'score': 0}
+  Live Implied Move: 6.17%
+  Required Move (Historical 3.81% * Multiplier 1.2): 4.57%
+  Consensus Alignment: 0.95 | Adj Multiplier: 1.09
+  Adjusted Required Move: 4.14%
+Skipping AON: Poor spread: Short leg spread too wide (46% > 15%).
+
+Processing candidate: APH
+  Sentiment Score: -1 | Details: {'price': 143.115, 'sma_200': 141.5452, 'below_200dma': False, 'sma_50': 151.5326, 'below_50dma': True, 'pct_from_52w_high': -19.832511763387856, 'score': -1}
+  Live Implied Move: 11.37%
+  Required Move (Historical 6.46% * Multiplier 1.2): 7.75%
+  Consensus Alignment: 1.44 | Adj Multiplier: 1.08
+  Adjusted Required Move: 6.98%
+Skipping APH: Poor spread: Long leg spread too wide (24% > 15%).
+
+Processing candidate: BG
+  Sentiment Score: -1 | Details: {'price': 116.715, 'sma_200': 111.35835, 'below_200dma': False, 'sma_50': 118.9532, 'below_50dma': True, 'pct_from_52w_high': -13.461110699191813, 'score': -1}
+  Live Implied Move: 6.81%
+  Required Move (Historical 2.91% * Multiplier 1.2): 3.49%
+  Consensus Alignment: -1.44 | Adj Multiplier: 1.32
+  Adjusted Required Move: 3.84%
+Skipping BG: Poor spread: Short leg spread too wide (23% > 15%).
+
+Processing candidate: BIIB
+  Sentiment Score: 0 | Details: {'price': 202.21, 'sma_200': 182.1784, 'below_200dma': False, 'sma_50': 199.3416, 'below_50dma': False, 'pct_from_52w_high': -7.969233569998176, 'score': 0}
+  Live Implied Move: 4.56%
+  Required Move (Historical 2.03% * Multiplier 1.2): 2.44%
+  Consensus Alignment: 1.11 | Adj Multiplier: 1.08
+  Adjusted Required Move: 2.19%
+Skipping BIIB: Poor spread: Short leg spread too wide (84% > 15%).
+
+Processing candidate: BSX
+  Sentiment Score: -3 | Details: {'price': 46.53, 'sma_200': 74.16995, 'below_200dma': True, 'sma_50': 47.2944, 'below_50dma': True, 'pct_from_52w_high': -57.506849315068486, 'score': -3}
+  No override: sentiment bearish (-3) but analysts bullish (1.50)
+  Live Implied Move: 7.03%
+  Required Move (Historical 3.99% * Multiplier 1.2): 4.79%
+  Consensus Alignment: 1.50 | Adj Multiplier: 1.08
+  Adjusted Required Move: 4.31%
+Skipping BSX: Poor spread: Long leg spread too wide (40% > 15%).
+
+Processing candidate: BXP
+  Sentiment Score: -1 | Details: {'price': 69.635, 'sma_200': 63.92305, 'below_200dma': False, 'sma_50': 64.851, 'below_50dma': False, 'pct_from_52w_high': -12.22110172696331, 'short_ratio': 7.81, 'score': -1}
+  Live Implied Move: 5.58%
+  Required Move (Historical 2.23% * Multiplier 1.2): 2.68%
+  Consensus Alignment: -0.86 | Adj Multiplier: 1.30
+  Adjusted Required Move: 2.91%
+Skipping BXP: Poor spread: Short leg spread too wide (167% > 15%).
+
+Processing candidate: CBRE
+  Sentiment Score: -1 | Details: {'price': 147.625, 'sma_200': 148.0671, 'below_200dma': True, 'sma_50': 134.396, 'below_50dma': False, 'pct_from_52w_high': -15.289493314971029, 'score': -1}
+  Live Implied Move: 8.87%
+  Required Move (Historical 2.91% * Multiplier 1.2): 3.49%
+  Consensus Alignment: 1.46 | Adj Multiplier: 1.08
+  Adjusted Required Move: 3.14%
+Skipping CBRE: Poor spread: Short leg spread too wide (78% > 15%).
+
+Processing candidate: CSGP
+  Sentiment Score: -2 | Details: {'price': 31.11, 'sma_200': 49.73725, 'below_200dma': True, 'sma_50': 30.9692, 'below_50dma': False, 'pct_from_52w_high': -68.06938314687469, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.86)
+  Live Implied Move: 13.25%
+  Required Move (Historical 3.56% * Multiplier 1.2): 4.27%
+  Consensus Alignment: -1.14 | Adj Multiplier: 1.32
+  Adjusted Required Move: 4.70%
+Skipping CSGP: Poor spread: Short leg spread too wide (46% > 15%).
+
+Processing candidate: CTSH
+  Sentiment Score: -2 | Details: {'price': 50.92, 'sma_200': 64.32245, 'below_200dma': True, 'sma_50': 47.1722, 'below_50dma': False, 'pct_from_52w_high': -41.49143973342525, 'score': -2}
+  Strategy Override: Bear Call (sentiment score -2 <= -2)
+  Live Implied Move: 11.18%
+  Required Move (Historical 3.85% * Multiplier 1.2): 4.62%
+  Consensus Alignment: -0.83 | Adj Multiplier: 1.30
+  Adjusted Required Move: 5.00%
+Skipping CTSH: Poor spread: Short leg spread too wide (27% > 15%).
+
+Processing candidate: EA
+No valid mid prices for EA ATM straddle via Tradier
+Skipping EA: Failed to fetch option straddle quotes.
+
+Processing candidate: ETR
+  Sentiment Score: -1 | Details: {'price': 113.25, 'sma_200': 103.89005, 'below_200dma': False, 'sma_50': 112.3472, 'below_50dma': False, 'pct_from_52w_high': -4.390037990713384, 'short_ratio': 7.26, 'score': -1}
+  Live Implied Move: 4.47%
+  Required Move (Historical 1.89% * Multiplier 1.2): 2.27%
+  Consensus Alignment: 1.29 | Adj Multiplier: 1.08
+  Adjusted Required Move: 2.04%
+Skipping ETR: Poor spread: Short leg spread too wide (24% > 15%).
+
+Processing candidate: EXE
+  Sentiment Score: -3 | Details: {'price': 88.84, 'sma_200': 102.81808, 'below_200dma': True, 'sma_50': 90.8628, 'below_50dma': True, 'pct_from_52w_high': -29.837862597831315, 'score': -3}
+  No override: sentiment bearish (-3) but analysts bullish (1.58)
+  Live Implied Move: 6.10%
+  Required Move (Historical 1.43% * Multiplier 1.2): 1.72%
+  Consensus Alignment: 1.42 | Adj Multiplier: 1.08
+  Adjusted Required Move: 1.54%
+Skipping EXE: Poor spread: Short leg spread too wide (40% > 15%).
+
+Processing candidate: EXR
+  Sentiment Score: 0 | Details: {'price': 151.7, 'sma_200': 140.55824, 'below_200dma': False, 'sma_50': 145.4706, 'below_50dma': False, 'pct_from_52w_high': -2.2488562407371666, 'score': 0}
+  Live Implied Move: 5.49%
+  Required Move (Historical 2.79% * Multiplier 1.2): 3.35%
+  Consensus Alignment: 0.67 | Adj Multiplier: 1.12
+  Adjusted Required Move: 3.12%
+Skipping EXR: Poor spread: Short leg spread too wide (80% > 15%).
+
+Processing candidate: F
+  Sentiment Score: 0 | Details: {'price': 14.775, 'sma_200': 13.27495, 'below_200dma': False, 'sma_50': 14.4138, 'below_50dma': False, 'pct_from_52w_high': -16.901012373453323, 'score': 0}
+  Live Implied Move: 5.64%
+  Required Move (Historical 4.01% * Multiplier 1.2): 4.81%
+  Consensus Alignment: -0.29 | Adj Multiplier: 1.23
+  Adjusted Required Move: 4.95%
+Skipping F: Poor spread: Long leg spread too wide (40% > 15%).
+
+Processing candidate: FE
+  Sentiment Score: -1 | Details: {'price': 49.715, 'sma_200': 47.42765, 'below_200dma': False, 'sma_50': 47.1406, 'below_50dma': False, 'pct_from_52w_high': -5.015284677111196, 'short_ratio': 6.63, 'score': -1}
+  Live Implied Move: 4.06%
+  Required Move (Historical 1.00% * Multiplier 1.2): 1.20%
+  Consensus Alignment: -0.76 | Adj Multiplier: 1.29
+  Adjusted Required Move: 1.29%
+Skipping FE: Poor spread: Short leg spread too wide (120% > 15%).
+
+Processing candidate: FLEX
+  Sentiment Score: -2 | Details: {'price': 106.57, 'sma_200': 87.1228, 'below_200dma': False, 'sma_50': 140.9888, 'below_50dma': True, 'pct_from_52w_high': -36.13208677933598, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.27)
+  Live Implied Move: 16.91%
+  Required Move (Historical 6.79% * Multiplier 1.2): 8.15%
+  Consensus Alignment: 1.73 | Adj Multiplier: 1.08
+  Adjusted Required Move: 7.33%
+Skipping FLEX: Poor spread: Short leg spread too wide (19% > 15%).
+
+Processing candidate: FTV
+  Sentiment Score: 0 | Details: {'price': 63.72, 'sma_200': 56.61835, 'below_200dma': False, 'sma_50': 60.7494, 'below_50dma': False, 'pct_from_52w_high': -1.301115241635693, 'score': 0}
+  Live Implied Move: 7.04%
+  Required Move (Historical 4.79% * Multiplier 1.2): 5.75%
+  Consensus Alignment: -0.27 | Adj Multiplier: 1.23
+  Adjusted Required Move: 5.90%
+Skipping FTV: Poor spread: Missing quotes for short call.
+
+Processing candidate: GD
+  Sentiment Score: 0 | Details: {'price': 391.96, 'sma_200': 348.5479, 'below_200dma': False, 'sma_50': 356.118, 'below_50dma': False, 'pct_from_52w_high': -0.544271196762294, 'score': 0}
+  Live Implied Move: 3.72%
+  Required Move (Historical 3.02% * Multiplier 1.2): 3.62%
+  Consensus Alignment: 0.88 | Adj Multiplier: 1.09
+  Adjusted Required Move: 3.31%
+Skipping GD: Poor spread: Short leg spread too wide (52% > 15%).
+
+Processing candidate: GEHC
+  Sentiment Score: -3 | Details: {'price': 63.145, 'sma_200': 73.17673, 'below_200dma': True, 'sma_50': 63.4959, 'below_50dma': True, 'pct_from_52w_high': -29.659128884928144, 'score': -3}
+  No override: sentiment bearish (-3) but analysts bullish (1.74)
+  Live Implied Move: 5.38%
+  Required Move (Historical 5.27% * Multiplier 1.2): 6.32%
+  Consensus Alignment: 1.26 | Adj Multiplier: 1.08
+  Adjusted Required Move: 5.69%
+Skipping GEHC: Implied move 5.38% < Required move 5.69% (No Edge).
+
+Processing candidate: HUM
+  Sentiment Score: 0 | Details: {'price': 387.27, 'sma_200': 263.53946, 'below_200dma': False, 'sma_50': 362.4176, 'below_50dma': False, 'pct_from_52w_high': -9.702014549524346, 'score': 0}
+  Live Implied Move: 7.45%
+  Required Move (Historical 5.81% * Multiplier 1.2): 6.97%
+  Consensus Alignment: -0.50 | Adj Multiplier: 1.26
+  Adjusted Required Move: 7.32%
+Skipping HUM: Poor spread: Short leg spread too wide (44% > 15%).
+
+Processing candidate: JCI
+  Sentiment Score: -1 | Details: {'price': 139.285, 'sma_200': 129.98946, 'below_200dma': False, 'sma_50': 141.9454, 'below_50dma': True, 'pct_from_52w_high': -7.868104246593472, 'score': -1}
+  Live Implied Move: 7.90%
+  Required Move (Historical 5.14% * Multiplier 1.2): 6.17%
+  Consensus Alignment: 0.90 | Adj Multiplier: 1.09
+  Adjusted Required Move: 5.61%
+Skipping JCI: Poor spread: Short leg spread too wide (44% > 15%).
+
+Processing candidate: KLAC
+  Sentiment Score: -2 | Details: {'price': 191.535, 'sma_200': 160.97433, 'below_200dma': False, 'sma_50': 221.149, 'below_50dma': True, 'pct_from_52w_high': -37.68585092884797, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.97)
+  Live Implied Move: 16.77%
+  Required Move (Historical 2.90% * Multiplier 1.2): 3.48%
+  Consensus Alignment: -1.03 | Adj Multiplier: 1.32
+  Adjusted Required Move: 3.83%
+Skipping KLAC: Poor spread: Short leg spread too wide (20% > 15%).
+
+Processing candidate: MAS
+  Sentiment Score: 0 | Details: {'price': 81.8, 'sma_200': 68.3538, 'below_200dma': False, 'sma_50': 74.1894, 'below_50dma': False, 'pct_from_52w_high': -2.196981019279636, 'score': 0}
+  Live Implied Move: 8.18%
+  Required Move (Historical 4.97% * Multiplier 1.2): 5.96%
+  Consensus Alignment: 0.65 | Adj Multiplier: 1.12
+  Adjusted Required Move: 5.58%
+Skipping MAS: Poor spread: Missing quotes for short put.
+
+Processing candidate: MDLZ
+  Sentiment Score: 0 | Details: {'price': 62.36, 'sma_200': 58.597, 'below_200dma': False, 'sma_50': 60.8644, 'below_50dma': False, 'pct_from_52w_high': -11.332290629887671, 'score': 0}
+  Live Implied Move: 3.24%
+  Required Move (Historical 2.57% * Multiplier 1.2): 3.08%
+  Consensus Alignment: 1.09 | Adj Multiplier: 1.08
+  Adjusted Required Move: 2.78%
+Skipping MDLZ: Poor spread: Short leg spread too wide (33% > 15%).
+
+Processing candidate: NXPI
+  Sentiment Score: -2 | Details: {'price': 260.985, 'sma_200': 240.8618, 'below_200dma': False, 'sma_50': 294.8978, 'below_50dma': True, 'pct_from_52w_high': -23.2284159435211, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.77)
+  Live Implied Move: 12.21%
+  Required Move (Historical 5.65% * Multiplier 1.2): 6.78%
+  Consensus Alignment: -1.23 | Adj Multiplier: 1.32
+  Adjusted Required Move: 7.46%
+Skipping NXPI: Poor spread: Long leg spread too wide (26% > 15%).
+
+Processing candidate: ODFL
+  Sentiment Score: 0 | Details: {'price': 227.69, 'sma_200': 186.5992, 'below_200dma': False, 'sma_50': 225.0832, 'below_50dma': False, 'pct_from_52w_high': -9.657580446772212, 'score': 0}
+  Live Implied Move: 8.42%
+  Required Move (Historical 3.38% * Multiplier 1.2): 4.06%
+  Consensus Alignment: -0.46 | Adj Multiplier: 1.25
+  Adjusted Required Move: 4.24%
+Skipping ODFL: Poor spread: Long leg spread too wide (35% > 15%).
+
+Processing candidate: OMC
+  Sentiment Score: -1 | Details: {'price': 86.19, 'sma_200': 76.73075, 'below_200dma': False, 'sma_50': 76.3744, 'below_50dma': False, 'pct_from_52w_high': -1.3844393592677435, 'short_ratio': 5.43, 'score': -1}
+  Live Implied Move: 6.71%
+  Required Move (Historical 2.01% * Multiplier 1.2): 2.41%
+  Consensus Alignment: 0.92 | Adj Multiplier: 1.09
+  Adjusted Required Move: 2.19%
+Skipping OMC: Poor spread: Short leg spread too wide (19% > 15%).
+
+Processing candidate: PG
+  Sentiment Score: 0 | Details: {'price': 151.03, 'sma_200': 148.12344, 'below_200dma': False, 'sma_50': 147.0234, 'below_50dma': False, 'pct_from_52w_high': -9.698056801195815, 'score': 0}
+  Live Implied Move: 2.62%
+  Required Move (Historical 2.67% * Multiplier 1.2): 3.20%
+  Consensus Alignment: 0.96 | Adj Multiplier: 1.08
+  Adjusted Required Move: 2.90%
+Skipping PG: Implied move 2.62% < Required move 2.90% (No Edge).
+
+Processing candidate: PPG
+  Sentiment Score: 0 | Details: {'price': 121.395, 'sma_200': 109.23285, 'below_200dma': False, 'sma_50': 115.2542, 'below_50dma': False, 'pct_from_52w_high': -9.019710709735449, 'score': 0}
+  Live Implied Move: 3.75%
+  Required Move (Historical 2.54% * Multiplier 1.2): 3.05%
+  Consensus Alignment: 0.87 | Adj Multiplier: 1.10
+  Adjusted Required Move: 2.78%
+Skipping PPG: Poor spread: Short leg spread too wide (52% > 15%).
+
+Processing candidate: STX
+  Sentiment Score: -2 | Details: {'price': 755.67, 'sma_200': 506.6239, 'below_200dma': False, 'sma_50': 887.4638, 'below_50dma': True, 'pct_from_52w_high': -34.00262008733625, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.44)
+  Live Implied Move: 11.56%
+  Required Move (Historical 6.18% * Multiplier 1.2): 7.42%
+  Consensus Alignment: 1.56 | Adj Multiplier: 1.08
+  Adjusted Required Move: 6.67%
+Skipping STX: Poor spread: Short leg spread too wide (32% > 15%).
+
+Processing candidate: SW
+  Sentiment Score: 0 | Details: {'price': 51.22, 'sma_200': 41.1355, 'below_200dma': False, 'sma_50': 42.8624, 'below_50dma': False, 'pct_from_52w_high': -2.716049382716049, 'score': 0}
+  Live Implied Move: 9.54%
+  Required Move (Historical 4.88% * Multiplier 1.2): 5.86%
+  Consensus Alignment: -1.69 | Adj Multiplier: 1.32
+  Adjusted Required Move: 6.44%
+Skipping SW: Poor spread: Short leg spread too wide (29% > 15%).
+
+Processing candidate: SWK
+  Sentiment Score: 0 | Details: {'price': 93.75, 'sma_200': 77.50725, 'below_200dma': False, 'sma_50': 84.4086, 'below_50dma': False, 'pct_from_52w_high': -2.3844231570179155, 'score': 0}
+  Live Implied Move: 8.52%
+  Required Move (Historical 3.96% * Multiplier 1.2): 4.75%
+  Consensus Alignment: -0.53 | Adj Multiplier: 1.26
+  Adjusted Required Move: 5.01%
+Skipping SWK: Poor spread: Short leg spread too wide (21% > 15%).
+
+Processing candidate: SWKS
+  Sentiment Score: -4 | Details: {'price': 64.06, 'sma_200': 64.75025, 'below_200dma': True, 'sma_50': 69.099, 'below_50dma': True, 'pct_from_52w_high': -29.526952695269532, 'short_ratio': 5.79, 'score': -4}
+  Strategy Override: Bear Call (sentiment score -4 <= -2)
+  Live Implied Move: 12.87%
+  Required Move (Historical 6.35% * Multiplier 1.2): 7.62%
+  Consensus Alignment: -0.04 | Adj Multiplier: 1.21
+  Adjusted Required Move: 7.65%
+Skipping SWKS: Poor spread: Short leg spread too wide (21% > 15%).
+
+Processing candidate: TER
+  Sentiment Score: -2 | Details: {'price': 309.54, 'sma_200': 285.33945, 'below_200dma': False, 'sma_50': 379.7204, 'below_50dma': True, 'pct_from_52w_high': -36.55797175708635, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.76)
+  Live Implied Move: 12.92%
+  Required Move (Historical 9.79% * Multiplier 1.2): 11.75%
+  Consensus Alignment: -1.24 | Adj Multiplier: 1.32
+  Adjusted Required Move: 12.92%
+Skipping TER: Implied move 12.92% < Required move 12.92% (No Edge).
+
+Processing candidate: V
+  Sentiment Score: 0 | Details: {'price': 369.38, 'sma_200': 329.8927, 'below_200dma': False, 'sma_50': 337.3068, 'below_50dma': False, 'pct_from_52w_high': -0.14314312014154396, 'score': 0}
+  Live Implied Move: 3.12%
+  Required Move (Historical 2.35% * Multiplier 1.2): 2.82%
+  Consensus Alignment: 1.63 | Adj Multiplier: 1.08
+  Adjusted Required Move: 2.54%
+
+Processing candidate: VLTO
+  Sentiment Score: 0 | Details: {'price': 97.585, 'sma_200': 93.9308, 'below_200dma': False, 'sma_50': 87.656, 'below_50dma': False, 'pct_from_52w_high': -11.374988647715925, 'score': 0}
+  Live Implied Move: 6.58%
+  Required Move (Historical 2.33% * Multiplier 1.2): 2.80%
+  Consensus Alignment: -1.11 | Adj Multiplier: 1.32
+  Adjusted Required Move: 3.08%
+Skipping VLTO: Poor spread: Short leg spread too wide (88% > 15%).
+
+Processing candidate: VMC
+  Sentiment Score: -2 | Details: {'price': 287.5775, 'sma_200': 290.9119, 'below_200dma': True, 'sma_50': 285.7848, 'below_50dma': False, 'pct_from_52w_high': -13.142196985713852, 'short_ratio': 5.42, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.83)
+  Live Implied Move: 6.58%
+  Required Move (Historical 3.97% * Multiplier 1.2): 4.76%
+  Consensus Alignment: 1.17 | Adj Multiplier: 1.08
+  Adjusted Required Move: 4.29%
+Skipping VMC: Poor spread: Short leg spread too wide (41% > 15%).
+
+Processing candidate: VRSK
+  Sentiment Score: -1 | Details: {'price': 214.43, 'sma_200': 199.9452, 'below_200dma': False, 'sma_50': 182.2702, 'below_50dma': False, 'pct_from_52w_high': -28.746594005449587, 'score': -1}
+  Live Implied Move: 7.45%
+  Required Move (Historical 4.85% * Multiplier 1.2): 5.82%
+  Consensus Alignment: 0.89 | Adj Multiplier: 1.09
+  Adjusted Required Move: 5.30%
+Skipping VRSK: Poor spread: Missing quotes for long put.
+
+Processing candidate: VRT
+  Sentiment Score: -2 | Details: {'price': 265.57, 'sma_200': 244.924, 'below_200dma': False, 'sma_50': 314.7, 'below_50dma': True, 'pct_from_52w_high': -30.10120152131286, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.43)
+  Live Implied Move: 9.00%
+  Required Move (Historical 9.90% * Multiplier 1.2): 11.88%
+  Consensus Alignment: 1.57 | Adj Multiplier: 1.08
+  Adjusted Required Move: 10.69%
+Skipping VRT: Implied move 9.00% < Required move 10.69% (No Edge).
+
+Processing candidate: WEC
+  Sentiment Score: -1 | Details: {'price': 114.69, 'sma_200': 112.5733, 'below_200dma': False, 'sma_50': 113.6282, 'below_50dma': False, 'pct_from_52w_high': -4.353264948711533, 'short_ratio': 6.22, 'score': -1}
+  Live Implied Move: 4.26%
+  Required Move (Historical 1.28% * Multiplier 1.2): 1.54%
+  Consensus Alignment: 0.65 | Adj Multiplier: 1.12
+  Adjusted Required Move: 1.44%
+Skipping WEC: Poor spread: Short leg spread too wide (112% > 15%).
+
+Processing candidate: WM
+  Sentiment Score: 0 | Details: {'price': 239.95, 'sma_200': 222.91106, 'below_200dma': False, 'sma_50': 224.4284, 'below_50dma': False, 'pct_from_52w_high': -3.296659009390242, 'score': 0}
+  Live Implied Move: 5.08%
+  Required Move (Historical 2.74% * Multiplier 1.2): 3.29%
+  Consensus Alignment: -1.25 | Adj Multiplier: 1.32
+  Adjusted Required Move: 3.62%
+Skipping WM: Poor spread: Short leg spread too wide (21% > 15%).
+Advisory sent: 1 viable, 42 skipped of 43 candidates.
+
+--- Running Afternoon Trade Scan (1:00 PM CT) ---
+Fetching earnings dates for 435 tickers (fast calendar pass)...
+Found 86 tickers with calendar dates matching today/tomorrow.
+Fetching session details for 86 matching tickers...
+Nasdaq timing: 282 stocks today, 305 stocks tomorrow.
+Found 43 potential candidates reporting today AMC or confirmed tomorrow BMO.
+
+Processing candidate: AEP
+  Sentiment Score: -2 | Details: {'price': 130.76, 'sma_200': 126.0921, 'below_200dma': False, 'sma_50': 131.5676, 'below_50dma': True, 'pct_from_52w_high': -6.985346421966156, 'short_ratio': 5.56, 'score': -2}
+  Strategy Override: Bear Call (sentiment score -2 <= -2)
+  Live Implied Move: 4.03%
+  Required Move (Historical 1.65% * Multiplier 1.2): 1.98%
+  Consensus Alignment: -0.92 | Adj Multiplier: 1.31
+  Adjusted Required Move: 2.16%
+Skipping AEP: Poor spread: Short leg spread too wide (181% > 15%).
+
+Processing candidate: AOS
+  Sentiment Score: -3 | Details: {'price': 62.725, 'sma_200': 65.976, 'below_200dma': True, 'sma_50': 59.1348, 'below_50dma': False, 'pct_from_52w_high': -23.384634176132895, 'short_ratio': 5.3, 'score': -3}
+  Strategy Override: Bear Call (sentiment score -3 <= -2)
+  Live Implied Move: 8.10%
+  Required Move (Historical 2.99% * Multiplier 1.2): 3.59%
+  Consensus Alignment: -0.46 | Adj Multiplier: 1.26
+  Adjusted Required Move: 3.75%
+Skipping AOS: Poor spread: Missing quotes for short call.
+
+Processing candidate: APD
+  Sentiment Score: 0 | Details: {'price': 295.0, 'sma_200': 275.6757, 'below_200dma': False, 'sma_50': 289.254, 'below_50dma': False, 'pct_from_52w_high': -6.310540858131929, 'score': 0}
+  Live Implied Move: 6.34%
+  Required Move (Historical 4.30% * Multiplier 1.2): 5.16%
+  Consensus Alignment: -1.19 | Adj Multiplier: 1.32
+  Adjusted Required Move: 5.68%
+Skipping APD: Poor spread: Short leg spread too wide (140% > 15%).
+
+Processing candidate: AWK
+  Sentiment Score: 0 | Details: {'price': 137.34, 'sma_200': 131.39964, 'below_200dma': False, 'sma_50': 128.488, 'below_50dma': False, 'pct_from_52w_high': -7.121119902617163, 'score': 0}
+  Live Implied Move: 4.39%
+  Required Move (Historical 1.18% * Multiplier 1.2): 1.42%
+  Consensus Alignment: 0.38 | Adj Multiplier: 1.15
+  Adjusted Required Move: 1.36%
+Skipping AWK: Poor spread: Short leg spread too wide (143% > 15%).
+
+Processing candidate: BAX
+  Sentiment Score: -1 | Details: {'price': 24.815, 'sma_200': 19.5226, 'below_200dma': False, 'sma_50': 20.7564, 'below_50dma': False, 'pct_from_52w_high': -14.253628196268139, 'short_ratio': 5.81, 'score': -1}
+  Live Implied Move: 5.80%
+  Required Move (Historical 5.80% * Multiplier 1.2): 6.96%
+  Consensus Alignment: -0.15 | Adj Multiplier: 1.22
+  Adjusted Required Move: 7.07%
+Skipping BAX: Implied move 5.80% < Required move 7.07% (No Edge).
+
+Processing candidate: BLDR
+  Sentiment Score: -3 | Details: {'price': 71.02, 'sma_200': 96.6319, 'below_200dma': True, 'sma_50': 76.6454, 'below_50dma': True, 'pct_from_52w_high': -52.9762298881017, 'score': -3}
+  Strategy Override: Bear Call (sentiment score -3 <= -2)
+  Live Implied Move: 10.62%
+  Required Move (Historical 3.73% * Multiplier 1.2): 4.48%
+  Consensus Alignment: -0.77 | Adj Multiplier: 1.29
+  Adjusted Required Move: 4.82%
+Skipping BLDR: Poor spread: Short leg spread too wide (113% > 15%).
+
+Processing candidate: BMY
+  Sentiment Score: 0 | Details: {'price': 63.685, 'sma_200': 55.2611, 'below_200dma': False, 'sma_50': 57.7084, 'below_50dma': False, 'pct_from_52w_high': -1.9778359242727361, 'score': 0}
+  Live Implied Move: 2.80%
+  Required Move (Historical 2.88% * Multiplier 1.2): 3.46%
+  Consensus Alignment: 0.50 | Adj Multiplier: 1.14
+  Adjusted Required Move: 3.28%
+Skipping BMY: Implied move 2.80% < Required move 3.28% (No Edge).
+
+Processing candidate: CHRW
+  Sentiment Score: -3 | Details: {'price': 168.96, 'sma_200': 171.38464, 'below_200dma': True, 'sma_50': 186.684, 'below_50dma': True, 'pct_from_52w_high': -19.66909142775638, 'short_ratio': 5.13, 'score': -3}
+  Strategy Override: Bear Call (sentiment score -3 <= -2)
+  Live Implied Move: 8.73%
+  Required Move (Historical 7.23% * Multiplier 1.2): 8.68%
+  Consensus Alignment: -1.00 | Adj Multiplier: 1.32
+  Adjusted Required Move: 9.54%
+Skipping CHRW: Implied move 8.73% < Required move 9.54% (No Edge).
+
+Processing candidate: CI
+  Sentiment Score: 0 | Details: {'price': 297.7, 'sma_200': 280.12726, 'below_200dma': False, 'sma_50': 286.4864, 'below_50dma': False, 'pct_from_52w_high': -5.63286524867659, 'score': 0}
+  Live Implied Move: 4.94%
+  Required Move (Historical 3.71% * Multiplier 1.2): 4.45%
+  Consensus Alignment: 0.00 | Adj Multiplier: 1.20
+  Adjusted Required Move: 4.45%
+Skipping CI: Poor spread: Missing quotes for long call.
+
+Processing candidate: CMG
+  Sentiment Score: -2 | Details: {'price': 34.37, 'sma_200': 34.99405, 'below_200dma': True, 'sma_50': 32.5888, 'below_50dma': False, 'pct_from_52w_high': -22.83340817242928, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.69)
+  Live Implied Move: 6.80%
+  Required Move (Historical 6.16% * Multiplier 1.2): 7.39%
+  Consensus Alignment: -1.31 | Adj Multiplier: 1.32
+  Adjusted Required Move: 8.13%
+Skipping CMG: Implied move 6.80% < Required move 8.13% (No Edge).
+
+Processing candidate: CRH
+  Sentiment Score: -3 | Details: {'price': 101.445, 'sma_200': 114.2849, 'below_200dma': True, 'sma_50': 105.172, 'below_50dma': True, 'pct_from_52w_high': -22.884834663626012, 'score': -3}
+  No override: sentiment bearish (-3) but analysts bullish (1.33)
+  Live Implied Move: 3.77%
+  Required Move (Historical 3.89% * Multiplier 1.2): 4.67%
+  Consensus Alignment: 1.67 | Adj Multiplier: 1.08
+  Adjusted Required Move: 4.20%
+Skipping CRH: Implied move 3.77% < Required move 4.20% (No Edge).
+
+Processing candidate: CVNA
+  Sentiment Score: -3 | Details: {'price': 68.105, 'sma_200': 72.38492, 'below_200dma': True, 'sma_50': 66.8328, 'below_50dma': False, 'pct_from_52w_high': -30.061204789582856, 'short_ratio': 6.61, 'score': -3}
+  Strategy Override: Bear Call (sentiment score -3 <= -2)
+  Live Implied Move: 10.36%
+  Required Move (Historical 13.56% * Multiplier 1.2): 16.27%
+  Consensus Alignment: -1.00 | Adj Multiplier: 1.32
+  Adjusted Required Move: 17.90%
+Skipping CVNA: Implied move 10.36% < Required move 17.90% (No Edge).
+
+Processing candidate: EXC
+  Sentiment Score: 0 | Details: {'price': 46.97, 'sma_200': 46.2085, 'below_200dma': False, 'sma_50': 46.117, 'below_50dma': False, 'pct_from_52w_high': -7.265547877591312, 'score': 0}
+  Live Implied Move: 4.34%
+  Required Move (Historical 1.55% * Multiplier 1.2): 1.86%
+  Consensus Alignment: 0.18 | Adj Multiplier: 1.18
+  Adjusted Required Move: 1.83%
+Skipping EXC: Poor spread: Missing quotes for long put.
+
+Processing candidate: FTNT
+  Sentiment Score: -1 | Details: {'price': 147.415, 'sma_200': 99.4641, 'below_200dma': False, 'sma_50': 147.8214, 'below_50dma': True, 'pct_from_52w_high': -13.463457587320224, 'score': -1}
+  Live Implied Move: 11.42%
+  Required Move (Historical 12.05% * Multiplier 1.2): 14.46%
+  Consensus Alignment: -0.30 | Adj Multiplier: 1.24
+  Adjusted Required Move: 14.89%
+Skipping FTNT: Implied move 11.42% < Required move 14.89% (No Edge).
+
+Processing candidate: HOOD
+  Sentiment Score: -3 | Details: {'price': 90.92, 'sma_200': 100.13763, 'below_200dma': True, 'sma_50': 95.945, 'below_50dma': True, 'pct_from_52w_high': -40.90731834134928, 'score': -3}
+  No override: sentiment bearish (-3) but analysts bullish (1.71)
+  Live Implied Move: 8.23%
+  Required Move (Historical 7.61% * Multiplier 1.2): 9.13%
+  Consensus Alignment: -1.29 | Adj Multiplier: 1.32
+  Adjusted Required Move: 10.05%
+Skipping HOOD: Implied move 8.23% < Required move 10.05% (No Edge).
+
+Processing candidate: HSY
+  Sentiment Score: -2 | Details: {'price': 184.91, 'sma_200': 192.1022, 'below_200dma': True, 'sma_50': 180.3746, 'below_50dma': False, 'pct_from_52w_high': -22.78687155503591, 'score': -2}
+  Strategy Override: Bear Call (sentiment score -2 <= -2)
+  Live Implied Move: 3.70%
+  Required Move (Historical 2.38% * Multiplier 1.2): 2.86%
+  Consensus Alignment: -0.52 | Adj Multiplier: 1.26
+  Adjusted Required Move: 3.01%
+Skipping HSY: Poor spread: Short leg spread too wide (120% > 15%).
+
+Processing candidate: ICE
+  Sentiment Score: -1 | Details: {'price': 154.675, 'sma_200': 154.7877, 'below_200dma': True, 'sma_50': 140.2774, 'below_50dma': False, 'pct_from_52w_high': -18.312648534459985, 'score': -1}
+  Live Implied Move: 3.41%
+  Required Move (Historical 2.01% * Multiplier 1.2): 2.41%
+  Consensus Alignment: 1.50 | Adj Multiplier: 1.08
+  Adjusted Required Move: 2.17%
+Skipping ICE: Poor spread: Short leg spread too wide (69% > 15%).
+
+Processing candidate: INVH
+  Sentiment Score: 0 | Details: {'price': 30.1, 'sma_200': 27.6802, 'below_200dma': False, 'sma_50': 29.5372, 'below_50dma': False, 'pct_from_52w_high': -5.819774718397996, 'score': 0}
+  Live Implied Move: 4.08%
+  Required Move (Historical 2.05% * Multiplier 1.2): 2.46%
+  Consensus Alignment: -0.80 | Adj Multiplier: 1.30
+  Adjusted Required Move: 2.66%
+Skipping INVH: Poor spread: Missing quotes for short call.
+
+Processing candidate: IP
+  Sentiment Score: -2 | Details: {'price': 43.285, 'sma_200': 38.69875, 'below_200dma': False, 'sma_50': 35.8588, 'below_50dma': False, 'pct_from_52w_high': -20.76697785099763, 'short_ratio': 8.92, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.92)
+  Live Implied Move: 6.58%
+  Required Move (Historical 3.45% * Multiplier 1.2): 4.14%
+  Consensus Alignment: -1.08 | Adj Multiplier: 1.32
+  Adjusted Required Move: 4.55%
+Skipping IP: Poor spread: Missing quotes for short call.
+
+Processing candidate: KKR
+  Sentiment Score: -2 | Details: {'price': 101.62, 'sma_200': 107.49535, 'below_200dma': True, 'sma_50': 95.642, 'below_50dma': False, 'pct_from_52w_high': -33.79804560260586, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.59)
+  Live Implied Move: 4.64%
+  Required Move (Historical 2.22% * Multiplier 1.2): 2.66%
+  Consensus Alignment: -1.41 | Adj Multiplier: 1.32
+  Adjusted Required Move: 2.93%
+Skipping KKR: Poor spread: Short leg spread too wide (163% > 15%).
+
+Processing candidate: LHX
+  Sentiment Score: -2 | Details: {'price': 299.53, 'sma_200': 316.3115, 'below_200dma': True, 'sma_50': 299.457, 'below_50dma': False, 'pct_from_52w_high': -21.016269809877922, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.60)
+  Live Implied Move: 3.38%
+  Required Move (Historical 1.63% * Multiplier 1.2): 1.96%
+  Consensus Alignment: 1.40 | Adj Multiplier: 1.08
+  Adjusted Required Move: 1.76%
+Skipping LHX: Poor spread: Missing quotes for long put.
+
+Processing candidate: LRCX
+  Sentiment Score: -2 | Details: {'price': 258.64, 'sma_200': 238.909, 'below_200dma': False, 'sma_50': 337.7824, 'below_50dma': True, 'pct_from_52w_high': -41.01710376282783, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.49)
+  Live Implied Move: 8.58%
+  Required Move (Historical 4.00% * Multiplier 1.2): 4.80%
+  Consensus Alignment: -1.51 | Adj Multiplier: 1.32
+  Adjusted Required Move: 5.28%
+Skipping LRCX: Poor spread: Short leg spread too wide (37% > 15%).
+
+Processing candidate: MA
+  Sentiment Score: 0 | Details: {'price': 566.77, 'sma_200': 527.7794, 'below_200dma': False, 'sma_50': 509.8504, 'below_50dma': False, 'pct_from_52w_high': -5.816175615268293, 'score': 0}
+  Live Implied Move: 2.58%
+  Required Move (Historical 1.78% * Multiplier 1.2): 2.14%
+  Consensus Alignment: 1.63 | Adj Multiplier: 1.08
+  Adjusted Required Move: 1.92%
+Skipping MA: Poor spread: Short leg spread too wide (116% > 15%).
+
+Processing candidate: MAA
+  Sentiment Score: 0 | Details: {'price': 137.635, 'sma_200': 132.1335, 'below_200dma': False, 'sma_50': 134.522, 'below_50dma': False, 'pct_from_52w_high': -9.283548642235703, 'score': 0}
+  Live Implied Move: 4.06%
+  Required Move (Historical 0.68% * Multiplier 1.2): 0.82%
+  Consensus Alignment: 0.46 | Adj Multiplier: 1.14
+  Adjusted Required Move: 0.78%
+Skipping MAA: Poor spread: Missing quotes for short put.
+
+Processing candidate: META
+  Sentiment Score: -3 | Details: {'price': 595.9165, 'sma_200': 636.853, 'below_200dma': True, 'sma_50': 605.1182, 'below_50dma': True, 'pct_from_52w_high': -25.159623233908945, 'score': -3}
+  No override: sentiment bearish (-3) but analysts bullish (1.35)
+  Live Implied Move: 6.79%
+  Required Move (Historical 8.59% * Multiplier 1.2): 10.31%
+  Consensus Alignment: 1.65 | Adj Multiplier: 1.08
+  Adjusted Required Move: 9.28%
+Skipping META: Implied move 6.79% < Required move 9.28% (No Edge).
+
+Processing candidate: MGM
+  Sentiment Score: -1 | Details: {'price': 46.16, 'sma_200': 38.0036, 'below_200dma': False, 'sma_50': 45.5436, 'below_50dma': False, 'pct_from_52w_high': -10.525295599922478, 'short_ratio': 6.06, 'score': -1}
+  Live Implied Move: 5.48%
+  Required Move (Historical 5.02% * Multiplier 1.2): 6.02%
+  Consensus Alignment: 0.59 | Adj Multiplier: 1.13
+  Adjusted Required Move: 5.67%
+Skipping MGM: Implied move 5.48% < Required move 5.67% (No Edge).
+
+Processing candidate: MO
+  Sentiment Score: -1 | Details: {'price': 75.2, 'sma_200': 65.4953, 'below_200dma': False, 'sma_50': 71.996, 'below_50dma': False, 'pct_from_52w_high': -2.413703607578509, 'short_ratio': 6.69, 'score': -1}
+  Live Implied Move: 3.15%
+  Required Move (Historical 2.68% * Multiplier 1.2): 3.22%
+  Consensus Alignment: 0.36 | Adj Multiplier: 1.16
+  Adjusted Required Move: 3.10%
+Skipping MO: Poor spread: Short leg spread too wide (58% > 15%).
+
+Processing candidate: MSFT
+  Sentiment Score: -3 | Details: {'price': 397.1399, 'sma_200': 434.78836, 'below_200dma': True, 'sma_50': 398.5354, 'below_50dma': True, 'pct_from_52w_high': -28.501233234314522, 'score': -3}
+  No override: sentiment bearish (-3) but analysts bullish (1.34)
+  Live Implied Move: 5.70%
+  Required Move (Historical 4.46% * Multiplier 1.2): 5.35%
+  Consensus Alignment: 1.66 | Adj Multiplier: 1.08
+  Adjusted Required Move: 4.82%
+
+Processing candidate: NCLH
+  Sentiment Score: -1 | Details: {'price': 21.1, 'sma_200': 20.33995, 'below_200dma': False, 'sma_50': 19.035, 'below_50dma': False, 'pct_from_52w_high': -22.369389256806468, 'score': -1}
+  Live Implied Move: 6.34%
+  Required Move (Historical 7.09% * Multiplier 1.2): 8.51%
+  Consensus Alignment: -0.85 | Adj Multiplier: 1.30
+  Adjusted Required Move: 9.23%
+Skipping NCLH: Implied move 6.34% < Required move 9.23% (No Edge).
+
+Processing candidate: ORLY
+  Sentiment Score: -1 | Details: {'price': 91.14, 'sma_200': 93.3026, 'below_200dma': True, 'sma_50': 88.4192, 'below_50dma': False, 'pct_from_52w_high': -16.16997792494481, 'score': -1}
+  Live Implied Move: 6.67%
+  Required Move (Historical 2.77% * Multiplier 1.2): 3.32%
+  Consensus Alignment: -1.44 | Adj Multiplier: 1.32
+  Adjusted Required Move: 3.66%
+Skipping ORLY: Poor spread: Missing quotes for long call.
+
+Processing candidate: PSA
+  Sentiment Score: -1 | Details: {'price': 332.54, 'sma_200': 293.54904, 'below_200dma': False, 'sma_50': 315.146, 'below_50dma': False, 'pct_from_52w_high': -0.8970347191178634, 'short_ratio': 6.77, 'score': -1}
+  Live Implied Move: 4.75%
+  Required Move (Historical 2.03% * Multiplier 1.2): 2.44%
+  Consensus Alignment: 0.50 | Adj Multiplier: 1.14
+  Adjusted Required Move: 2.31%
+Skipping PSA: Poor spread: Short leg spread too wide (167% > 15%).
+
+Processing candidate: PTC
+  Sentiment Score: -2 | Details: {'price': 132.1, 'sma_200': 155.0847, 'below_200dma': True, 'sma_50': 127.4696, 'below_50dma': False, 'pct_from_52w_high': -39.86981655969776, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.90)
+  Live Implied Move: 8.78%
+  Required Move (Historical 3.67% * Multiplier 1.2): 4.40%
+  Consensus Alignment: 1.10 | Adj Multiplier: 1.08
+  Adjusted Required Move: 3.96%
+Skipping PTC: Poor spread: Missing quotes for long put.
+
+Processing candidate: PWR
+  Sentiment Score: -2 | Details: {'price': 572.49, 'sma_200': 558.3059, 'below_200dma': False, 'sma_50': 687.5014, 'below_50dma': True, 'pct_from_52w_high': -27.41806656101426, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.63)
+  Live Implied Move: 10.69%
+  Required Move (Historical 4.72% * Multiplier 1.2): 5.66%
+  Consensus Alignment: 1.37 | Adj Multiplier: 1.08
+  Adjusted Required Move: 5.10%
+Skipping PWR: Poor spread: Short leg spread too wide (39% > 15%).
+
+Processing candidate: QCOM
+  Sentiment Score: -3 | Details: {'price': 162.0, 'sma_200': 169.14024, 'below_200dma': True, 'sma_50': 201.4264, 'below_50dma': True, 'pct_from_52w_high': -37.67313019390582, 'score': -3}
+  Strategy Override: Bear Call (sentiment score -3 <= -2)
+  Live Implied Move: 7.25%
+  Required Move (Historical 6.18% * Multiplier 1.2): 7.42%
+  Consensus Alignment: -0.44 | Adj Multiplier: 1.25
+  Adjusted Required Move: 7.75%
+Skipping QCOM: Implied move 7.25% < Required move 7.75% (No Edge).
+
+Processing candidate: REG
+  Sentiment Score: 0 | Details: {'price': 80.9, 'sma_200': 75.05695, 'below_200dma': False, 'sma_50': 79.4006, 'below_50dma': False, 'pct_from_52w_high': -3.2990676547932, 'score': 0}
+  Live Implied Move: 3.73%
+  Required Move (Historical 1.32% * Multiplier 1.2): 1.58%
+  Consensus Alignment: 0.85 | Adj Multiplier: 1.10
+  Adjusted Required Move: 1.45%
+Skipping REG: Poor spread: Missing quotes for short put.
+
+Processing candidate: SBUX
+  Sentiment Score: -1 | Details: {'price': 103.76, 'sma_200': 94.503, 'below_200dma': False, 'sma_50': 102.434, 'below_50dma': False, 'pct_from_52w_high': -5.007781744941864, 'short_ratio': 6.51, 'score': -1}
+  Live Implied Move: 5.11%
+  Required Move (Historical 5.53% * Multiplier 1.2): 6.64%
+  Consensus Alignment: 0.61 | Adj Multiplier: 1.13
+  Adjusted Required Move: 6.23%
+Skipping SBUX: Implied move 5.11% < Required move 6.23% (No Edge).
+
+Processing candidate: SO
+  Sentiment Score: -1 | Details: {'price': 96.385, 'sma_200': 92.873, 'below_200dma': False, 'sma_50': 94.4312, 'below_50dma': False, 'pct_from_52w_high': -4.417889726299086, 'short_ratio': 5.76, 'score': -1}
+  Live Implied Move: 2.36%
+  Required Move (Historical 1.27% * Multiplier 1.2): 1.52%
+  Consensus Alignment: 0.33 | Adj Multiplier: 1.16
+  Adjusted Required Move: 1.47%
+Skipping SO: Poor spread: Missing quotes for short put.
+
+Processing candidate: TT
+  Sentiment Score: -1 | Details: {'price': 454.0, 'sma_200': 439.39496, 'below_200dma': False, 'sma_50': 470.1766, 'below_50dma': True, 'pct_from_52w_high': -10.253622472176648, 'score': -1}
+  Live Implied Move: 7.30%
+  Required Move (Historical 4.08% * Multiplier 1.2): 4.90%
+  Consensus Alignment: 0.96 | Adj Multiplier: 1.09
+  Adjusted Required Move: 4.43%
+Skipping TT: Poor spread: Short leg spread too wide (55% > 15%).
+
+Processing candidate: VICI
+  Sentiment Score: -3 | Details: {'price': 27.09, 'sma_200': 28.47625, 'below_200dma': True, 'sma_50': 27.2674, 'below_50dma': True, 'pct_from_52w_high': -20.346956777418402, 'score': -3}
+  No override: sentiment bearish (-3) but analysts bullish (1.84)
+  Live Implied Move: 3.06%
+  Required Move (Historical 0.92% * Multiplier 1.2): 1.10%
+  Consensus Alignment: 1.16 | Adj Multiplier: 1.08
+  Adjusted Required Move: 0.99%
+Skipping VICI: Poor spread: Short leg spread too wide (67% > 15%).
+
+Processing candidate: VLO
+  Sentiment Score: 0 | Details: {'price': 302.615, 'sma_200': 216.35475, 'below_200dma': False, 'sma_50': 267.2776, 'below_50dma': False, 'pct_from_52w_high': -5.503684736447664, 'score': 0}
+  Live Implied Move: 3.81%
+  Required Move (Historical 1.79% * Multiplier 1.2): 2.15%
+  Consensus Alignment: 0.60 | Adj Multiplier: 1.13
+  Adjusted Required Move: 2.02%
+Skipping VLO: Poor spread: Short leg spread too wide (194% > 15%).
+
+Processing candidate: VTR
+  Sentiment Score: -1 | Details: {'price': 97.5575, 'sma_200': 82.44225, 'below_200dma': False, 'sma_50': 88.6368, 'below_50dma': False, 'pct_from_52w_high': -3.9788385826771555, 'short_ratio': 5.88, 'score': -1}
+  Live Implied Move: 5.84%
+  Required Move (Historical 1.90% * Multiplier 1.2): 2.28%
+  Consensus Alignment: 1.35 | Adj Multiplier: 1.08
+  Adjusted Required Move: 2.05%
+Skipping VTR: Poor spread: Missing quotes for short put.
+
+Processing candidate: XEL
+  Sentiment Score: -2 | Details: {'price': 79.25, 'sma_200': 79.08655, 'below_200dma': False, 'sma_50': 79.5634, 'below_50dma': True, 'pct_from_52w_high': -5.912382761486411, 'short_ratio': 7.4, 'score': -2}
+  No override: sentiment bearish (-2) but analysts bullish (1.42)
+  Live Implied Move: 4.52%
+  Required Move (Historical 1.07% * Multiplier 1.2): 1.28%
+  Consensus Alignment: 1.58 | Adj Multiplier: 1.08
+  Adjusted Required Move: 1.16%
+Skipping XEL: Poor spread: Short leg spread too wide (175% > 15%).
+
+Processing candidate: YUM
+  Sentiment Score: -2 | Details: {'price': 152.525, 'sma_200': 154.03325, 'below_200dma': True, 'sma_50': 153.5824, 'below_50dma': True, 'pct_from_52w_high': -10.353238509462786, 'score': -2}
+  Strategy Override: Bear Call (sentiment score -2 <= -2)
+  Live Implied Move: 5.80%
+  Required Move (Historical 1.99% * Multiplier 1.2): 2.39%
+  Consensus Alignment: -0.77 | Adj Multiplier: 1.29
+  Adjusted Required Move: 2.57%
+Skipping YUM: Poor spread: Short leg spread too wide (81% > 15%).
+Advisory sent: 1 viable, 42 skipped of 43 candidates.

@@ -228,7 +228,7 @@ def run_afternoon_execution():
 
         analyst_calls = alpaca.get_analyst_calls(t, max_count=3)
 
-        ww = int(max(1, round(straddle_price * 0.5)))
+        ww = 5
         straddle_buffer = 1.2
         offset = round(straddle_price * straddle_buffer / ww) * ww
 
